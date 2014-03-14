@@ -1,0 +1,57 @@
+<project name="StartUp Manager" basedir=".">
+	
+	<property file="build.properties"/>
+	
+	<property name="app.dir" value="${server.dir}\webapps\startup-manager"/>
+	<property name="data.dir" value="${app.dir}\WEB-INF\data"/>
+	<property name="server.lib.dir" value="${server.dir}\lib"/>
+	<property name="app.lib.dir" value="${app.dir}\WEB-INF\lib"/>
+	
+	<path id="classpath">
+		<fileset dir="${app.lib.dir}" includes="**/*.jar"/>
+		<fileset dir="${server.lib.dir}" includes="**/*.jar"/>
+	</path>
+	
+	<target name="clean">
+		<delete dir="build"/>
+	</target>
+	
+	<!--
+	<target name="clean-web">
+		<delete dir="build/classes/web"/>
+	</target>
+	
+	<target name="compile-web">
+		<mkdir dir="build/classes/web"/>
+		<javac srcdir="src/web" destdir="build/classes" classpathref="classpath"/>	
+	</target>
+	-->
+	
+	<target name="compile-all">
+		<mkdir dir="build/classes"/>
+		<javac srcdir="src/com/simplefootie" destdir="build/classes" classpathref="classpath"/>
+		<javac srcdir="src/com/simplefootie/data" destdir="build/classes" classpathref="classpath"/>
+		<javac srcdir="src/com/simplefootie/outcomes" destdir="build/classes" classpathref="classpath"/>
+		<javac srcdir="src/com/simplefootie/domain" destdir="build/classes" classpathref="classpath"/>
+		<javac srcdir="src/com/simplefootie/web" destdir="build/classes" classpathref="classpath"/>
+	</target>
+	
+	<!--
+	<target name="deploy-web">
+		<copy todir="${app.dir}/WEB-INF/classes/web">
+			<fileset dir="build/classes/web"/>
+		</copy>
+	</target>
+	-->
+	
+	<!-- This will copy all the web build contents to the web application -->
+	<target name="deploy-all">
+		
+		<!-- only copy data to be consumed by the web layer -->
+		<copy todir="${data.dir}" file="resources/data/db.xml"/>
+		
+		<copy todir="${app.dir}/WEB-INF/classes">
+			<fileset dir="build/classes"/>
+		</copy>
+	</target>	
+</project>
