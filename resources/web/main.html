@@ -1,0 +1,21 @@
+<html>
+<head>
+	<title>Startup manager main menu</title>
+</head>
+<body>
+	<form name="mainMenuFrm" action="./getNextPage" method="POST">
+	
+		<input type="hidden" name="optionSrc" value="main"/>
+		
+		<label for="friendly=">Friendly match</label>
+		<input type="radio" name="main" value="friendly" id="friendly"/>
+		<p/>
+		<label for="logout">Logout</label>
+		<input type="radio" name="main" value="logout" id="logout"/>
+		
+		<p/>
+		
+		<input type="submit" name="mainSubmit" value="Submit" />
+	</form>
+</body>
+</html>

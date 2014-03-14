@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+    <display-name>SimpleFootie web application</display-name>
+    <description>
+		This is a basic web interface for the SimpleFootie application
+    </description>
+
+	<!-- Servlets -->
+	
+	<servlet>
+		<servlet-name>GetNextPage</servlet-name>
+		<servlet-class>com.simplefootie.web.Main</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>SelectLeague</servlet-name>
+		<servlet-class>com.simplefootie.web.SelectLeague</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>SelectTeam</servlet-name>
+		<servlet-class>com.simplefootie.web.SelectTeam</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>CalculateScore</servlet-name>
+		<servlet-class>com.simplefootie.web.CalculateScore</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>SignUpIn</servlet-name>
+		<servlet-class>com.simplefootie.web.SignUpIn</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>PostMatchNext</servlet-name>
+		<servlet-class>com.simplefootie.web.PostMatchNext</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ErrorRecovery</servlet-name>
+		<servlet-class>com.simplefootie.web.ErrorRecovery</servlet-class>
+	</servlet>
+
+	<!-- Servlet mappings -->
+	
+	<servlet-mapping>
+		<servlet-name>GetNextPage</servlet-name>
+		<url-pattern>/getNextPage</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>SelectLeague</servlet-name>
+		<url-pattern>/selectLeague</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>SelectTeam</servlet-name>
+		<url-pattern>/selectTeam</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>CalculateScore</servlet-name>
+		<url-pattern>/calculateScore</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>PostMatchNext</servlet-name>
+		<url-pattern>/postMatchNext</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>SignUpIn</servlet-name>
+		<url-pattern>/signUpIn</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>ErrorRecovery</servlet-name>
+		<url-pattern>/errorRecovery</url-pattern>
+	</servlet-mapping>
+</web-app>

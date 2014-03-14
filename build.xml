@@ -2,7 +2,7 @@
 	
 	<property file="build.properties"/>
 	
-	<property name="app.dir" value="${server.dir}\webapps\startup-manager"/>
+	<property name="app.dir" value="${server.dir}\webapps\${context.name}"/>
 	<property name="data.dir" value="${app.dir}\WEB-INF\data"/>
 	<property name="server.lib.dir" value="${server.dir}\lib"/>
 	<property name="app.lib.dir" value="${app.dir}\WEB-INF\lib"/>
@@ -27,6 +27,24 @@
 	</target>
 	-->
 	
+	<target name="init-server">
+		
+		<mkdir dir="${app.dir}"/>
+		<mkdir dir="${app.dir}/WEB-INF"/>
+		<mkdir dir="${app.dir}/WEB-INF/classes"/>
+		<mkdir dir="${app.dir}/WEB-INF/data"/>
+		<mkdir dir="${app.dir}/WEB-INF/lib"/>
+		
+		<!-- copy dependencies -->
+		<copy todir="${app.dir}/WEB-INF/lib">
+			<fileset dir="resources/lib"/>
+		</copy>
+	</target>
+	
+	<target name="clean-server">
+		<delete dir="${app.dir}"/>
+	</target>
+	
 	<target name="compile-all">
 		<mkdir dir="build/classes"/>
 		<javac srcdir="src/com/simplefootie" destdir="build/classes" classpathref="classpath"/>
@@ -46,6 +64,14 @@
 	
 	<!-- This will copy all the web build contents to the web application -->
 	<target name="deploy-all">
+		
+		<!-- copy web resoures -->
+		<copy todir="${app.dir}">
+			<fileset dir="resources/web"/>
+		</copy>
+		
+		<!-- copy deployment descriptor -->
+		<copy todir="${app.dir}/WEB-INF" file="resources/config/web.xml"/>
 		
 		<!-- only copy data to be consumed by the web layer -->
 		<copy todir="${data.dir}" file="resources/data/db.xml"/>
