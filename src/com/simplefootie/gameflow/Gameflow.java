@@ -13,7 +13,6 @@ import com.simplefootie.screens.NationSelection;
 import com.simplefootie.screens.TeamSelection;
 import com.simplefootie.screens.VenueSelection;
 
-
 /**
  * 
  * The class controlling the flow of the 'game'. There is a hardcoded constant for how many times a match is to be repeated, i.e. how many different results will be
