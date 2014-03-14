@@ -34,11 +34,6 @@ slow-paced, experimental kind of sub-project.
 So, this project is about simulating score calculations. Nothing fancy at first glance but good to build
 a basis on. 
 
-THE WEB APPLICATION WON'T RUN AS IT IS CURRENTLY. See below.
+It also includes a Java web application interface, if you don't want to run it through the console (I assume you will use an IDE to run it anyway). No overhead of database configuration needed (as in other similar poorly-thought-in-advance projects like openfootie), so you just set your server's path in the build.properties file (I used Apache TomEE as you'll see in the file), deploy based on build.xml and hopefully everything will work. There is one minor variation in features between the console and the web app, and the console edition will be generally more complete.
 
-It also includes a Java web application interface, if you don't want to run it through the console (I assume you will use an IDE to run it anyway). No overhead of database configuration needed (as in other similar projects like 
-openfootie), so you just set your server's path in the build.properties file (I used Apache TomEE as it's written in the file), deploy based on build.xml. There is one minor variation in features between the concole and the web app, and the console edition will be generally more complete.
-
-There is also a dependency in the SJON library I created for this project specifically, so you need to pull this too and reference it, in the project for running through the console. For the web application you will need to compile the SJON project with Maven and copy the jar file to the web application lib directory. 
-
-Now, there are also some server-side files that are missing (web.xml descriptor and web resources) in order to run the web application and will be pushed (and committed :$ ) in due course.
+There is also a dependency in the SJON library I created for this project specifically, so you need to pull this too and reference it, in the project for running through the console. For the web application, the jar file is included in the resources folder and copied automatically to the server's lib folder, so you could just add it to your build path as well for running through an IDE.
