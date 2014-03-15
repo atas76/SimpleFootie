@@ -76,7 +76,6 @@ public class Gameflow {
 		default:
 			return;
 		}
-		
 	}
 
 	/**
@@ -86,33 +85,28 @@ public class Gameflow {
 	 * @return the initialized match object
 	 */
 	public static Match initMatch(String label) {
-		
-		NationSelection.display();
-		String homeLeague = NationSelection.getUserInput();
-		
-		// System.out.println("You selected league: " + league);
-
-		TeamSelection.display(homeLeague);
-		String homeTeamName = TeamSelection.getUserInput();
-		
-		NationSelection.display();
-		String awayLeague = NationSelection.getUserInput();
-		
-		String awayTeamName;
-		
-		do {
-			TeamSelection.display(awayLeague);
-			awayTeamName = TeamSelection.getUserInput();
 			
-			if (homeTeamName.equals(awayTeamName)) {
-				System.out.println("A team cannot play itself. Please select another team");
-			}
-			
-		} while (homeTeamName.equals(awayTeamName));
+		String homeTeamName = selectTeam(null);
+		String awayTeamName = selectTeam(homeTeamName);
 		
 		VenueSelection.display();
 		Ground venue = VenueSelection.getUserInput();
 		
 		return new Match(homeTeamName, awayTeamName, venue, label);
+	}
+	
+	private static String selectTeam(String opponent) {
+		
+		NationSelection.display();
+		String league = NationSelection.getUserInput();
+		
+		TeamSelection.display(league);
+		String teamName = TeamSelection.getUserInput();
+		
+		while (opponent != null && opponent.equals(teamName)) {
+			System.out.println("A team cannot play against itself. Please select another team");
+			teamName = selectTeam(opponent);
+		}	
+		return teamName;
 	}
 }
