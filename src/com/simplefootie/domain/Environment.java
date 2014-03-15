@@ -56,7 +56,7 @@ public class Environment {
 		
 		environmentDocument = docBuilder.parse(new File(path));
 		
-		List<Team> teams = Leagues.getAllTeams();
+		List<Team> teams = Leagues.getAllTeams(environmentDocument);
 		
 		Collections.sort(teams);
 		

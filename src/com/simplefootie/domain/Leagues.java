@@ -46,11 +46,9 @@ public class Leagues {
 	 * 
 	 * @return All available teams from the data source.
 	 */
-	public static List<Team> getAllTeams() {
+	public static List<Team> getAllTeams(Document document) {
 		
 		List<Team> retVal = new ArrayList<Team>();
-		
-		Document document = Environment.getDataDocument();
 		
 		NodeList leagueElements = document.getElementsByTagName("League");
 		
