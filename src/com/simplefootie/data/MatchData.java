@@ -61,6 +61,12 @@ public class MatchData {
 		}
 	}
 	
+	private static void init() throws FileNotFoundException, IOException {
+		if (MatchData.scoredAveragesFile == null || MatchData.concededAveragesFile == null) {
+			MatchData.loadData();
+		}
+	}
+	
 	/**
 	 * Getter for the ratio of home goals vs. away goals scored for a specific team in a set of matches loaded from a data sample (defined in properties file).
 	 * 
@@ -71,9 +77,7 @@ public class MatchData {
 	 * @throws IOException Thrown if there is a problem reading from the data source file
 	 */
 	public static double getVenueRelatedScoredRatio(String teamName) throws FileNotFoundException, IOException {
-		if (MatchData.scoredAveragesFile == null) {
-			MatchData.loadData();
-		}
+		init();
 		return scoredAverages.get(teamName); 
 	}
 	
@@ -86,9 +90,7 @@ public class MatchData {
 	 * @throws IOException Thrown if there is a problem reading from the data source file
 	 */
 	public static double getVenueRelatedConcededRatio(String teamName) throws FileNotFoundException, IOException {
-		if (MatchData.concededAveragesFile == null) {
-			MatchData.loadData();
-		}
+		init();
 		return concededAverages.get(teamName);
 	}
 }
