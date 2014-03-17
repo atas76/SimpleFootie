@@ -125,7 +125,7 @@ public class SelectTeam extends HttpServlet {
 			String competition = "Friendly match";
 			
 			request.setAttribute("competition", competition);
-			request.setAttribute("currentMatch", currentMatch);
+			// request.setAttribute("currentMatch", currentMatch);
 			
 			// WebDisplayScreen displayScreen = new WebDisplayScreen("matchPreview", outputParameters);
 			
