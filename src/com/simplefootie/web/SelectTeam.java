@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.simplefootie.domain.Environment.Competitions;
 import com.simplefootie.domain.Match;
 import com.simplefootie.web.backend.SelectLeague;
 import com.simplefootie.web.framework.WebSelectionScreen;
@@ -69,7 +70,9 @@ public class SelectTeam extends HttpServlet {
 		
 		if ("homeFriendly".equals(optionSrc)) {
 			
-			currentMatch = new Match(); 
+			currentMatch = new Match();
+			
+			currentMatch.setLabel(Competitions.FRIENDLY);
 			
 			// We assume that a new match object should be created with a new home team selection. Otherwise we will refer to it as an existing object.
 			request.getSession().setAttribute("currentMatch", currentMatch);
@@ -107,14 +110,6 @@ public class SelectTeam extends HttpServlet {
 				currentMatch.setAwayTeam(teamSelected);
 			}
 			
-			/*
-			Map<String, String> outputParameters = new HashMap<String, String>();
-			
-			outputParameters.put("homeTeam", (String) ((Match) req.getSession().getAttribute("currentMatch")).getHomeTeamName());
-			outputParameters.put("awayTeam", (String) ((Match) req.getSession().getAttribute("currentMatch")).getAwayTeamName());
-			outputParameters.put("competition", "Friendly match");
-			*/
-			
 			if (currentMatch == null || !currentMatch.hasCompleteDetails()) {
 				logger.severe("Postcondition of match having complete details violated. Reset and start all over again");
 				request.getSession().removeAttribute("currentMatch"); // Just in case it is in an unstable 'state'
@@ -125,15 +120,16 @@ public class SelectTeam extends HttpServlet {
 			String competition = "Friendly match";
 			
 			request.setAttribute("competition", competition);
-			// request.setAttribute("currentMatch", currentMatch);
 			
-			// WebDisplayScreen displayScreen = new WebDisplayScreen("matchPreview", outputParameters);
+			options = new HashMap<String,String>();
+			options.put("home", "Home ground");
+			options.put("neutral", "Neutral ground");
 			
-			// out.print(((Match) req.getSession().getAttribute("currentMatch")).getAwayTeamName());
+			WebSelectionScreen selectionScreen = new WebSelectionScreen(options, "selectGround", "groundSelection", "groundSelection");
+			out.write(selectionScreen.generateHTML());
+			return;
 			
-			// resp.sendRedirect(req.getContextPath() + "/matchPreview.jsp");
-			
-			request.getRequestDispatcher(Navigation.MATCH_PREVIEW_DISPATCH).forward(request, response);
+			// request.getRequestDispatcher(Navigation.MATCH_PREVIEW_DISPATCH).forward(request, response);
 		}
 	}
 }

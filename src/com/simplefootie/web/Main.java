@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.simplefootie.Resources;
 import com.simplefootie.domain.Environment;
 import com.simplefootie.web.backend.SelectLeague;
 import com.simplefootie.web.framework.WebSelectionScreen;
@@ -31,7 +32,12 @@ public class Main extends HttpServlet {
 		// System.out.println("Test: Main");
 		
 		try {
-			Environment.load("../webapps/" + getServletContext().getContextPath() + "/WEB-INF/data/db.xml");
+			
+			// runs as a web application
+			Resources.setResourcesDataRoot("../webapps/" + getServletContext().getContextPath() + "/WEB-INF/data");
+			
+			Environment.load(Resources.getDataResource(Resources.DB));
+			
 		} catch (Exception ex) {
 			logger.severe("Problem loading main data");
 			ex.printStackTrace();

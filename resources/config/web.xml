@@ -45,6 +45,11 @@
 		<servlet-name>ErrorRecovery</servlet-name>
 		<servlet-class>com.simplefootie.web.ErrorRecovery</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>SelectVenue</servlet-name>
+		<servlet-class>com.simplefootie.web.SelectVenue</servlet-class>
+	</servlet>
 
 	<!-- Servlet mappings -->
 	
@@ -82,4 +87,10 @@
 		<servlet-name>ErrorRecovery</servlet-name>
 		<url-pattern>/errorRecovery</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>SelectVenue</servlet-name>
+		<url-pattern>/selectGround</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.sjon.core.SjonFileReader;
 import org.sjon.core.SjonRecord;
@@ -27,6 +29,8 @@ public class MatchData {
 	private static Map<String, Double> scoredAverages = new HashMap<String, Double>();
 	private static Map<String, Double> concededAverages = new HashMap<String, Double>();
 	
+	private static Logger log = Logger.getLogger("MatchData");
+	
 	/**
 	 * Loads the necessary data from a specified data source, defined in the properties file. The data currently are the ratios of home scored to away scored goals 
 	 * and home conceded to away conceded goals.
@@ -43,6 +47,8 @@ public class MatchData {
 			List<SjonRecord> scoredAveragesData = scoredAveragesFile.getData();
 			List<SjonRecord> concededAveragesData = concededAveragesFile.getData();
 			
+			log.config("Averages read from file");
+			
 			for (SjonRecord teamScoredAverage: scoredAveragesData) {
 				String teamName = teamScoredAverage.getString(0);
 				Double scoredAverage = teamScoredAverage.getDouble(1);
@@ -54,6 +60,9 @@ public class MatchData {
 				Double concededAverage = concededScoredAverage.getDouble(1);
 				concededAverages.put(teamName, concededAverage);
 			}
+			
+			log.config("Averages loaded");
+			
 		} catch (FileNotFoundException fnex) {
 			throw fnex;
 		} catch (IOException ioex) {
@@ -63,6 +72,9 @@ public class MatchData {
 	
 	private static void init() throws FileNotFoundException, IOException {
 		if (MatchData.scoredAveragesFile == null || MatchData.concededAveragesFile == null) {
+			
+			log.config("Loading data...");
+			
 			MatchData.loadData();
 		}
 	}
@@ -77,7 +89,14 @@ public class MatchData {
 	 * @throws IOException Thrown if there is a problem reading from the data source file
 	 */
 	public static double getVenueRelatedScoredRatio(String teamName) throws FileNotFoundException, IOException {
+		
+		log.setLevel(Level.CONFIG);
+		
 		init();
+		
+		log.config("init() passed");
+		log.config("Team name: " + teamName);
+		
 		return scoredAverages.get(teamName); 
 	}
 	

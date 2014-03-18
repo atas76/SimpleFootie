@@ -62,22 +62,43 @@
 	</target>
 	-->
 	
+	<target name="deploy-config">
+		<!-- copy deployment descriptor -->
+		<copy todir="${app.dir}/WEB-INF" file="resources/config/web.xml"/>	
+	</target>
+	
+	<!-- only web resources and jsps -->
+	<target name="deploy-web-light">
+		<copy todir="${app.dir}">
+			<fileset dir="resources/web"/>
+		</copy>	
+	</target>
+	
+	<target name="copy-data">
+		<copy todir="${data.dir}">
+			<fileset dir="resources/data"/>
+		</copy>
+	</target>
+	
 	<!-- This will copy all the web build contents to the web application -->
 	<target name="deploy-all">
 		
-		<!-- copy web resoures -->
-		<copy todir="${app.dir}">
-			<fileset dir="resources/web"/>
-		</copy>
-		
-		<!-- copy deployment descriptor -->
-		<copy todir="${app.dir}/WEB-INF" file="resources/config/web.xml"/>
-		
-		<!-- only copy data to be consumed by the web layer -->
-		<copy todir="${data.dir}" file="resources/data/db.xml"/>
+		<antcall target="deploy-web-light"/>
+		<antcall target="deploy-config"/>
+		<antcall target="copy-data"/>
 		
 		<copy todir="${app.dir}/WEB-INF/classes">
 			<fileset dir="build/classes"/>
 		</copy>
-	</target>	
+	</target>
+	
+	<target name="build-all">
+		<!-- clean, clean-server, init-server, compile-all, deploy-all -->
+		<antcall target="clean"/>
+		<antcall target="clean-server"/>
+		<antcall target="init-server"/>
+		<antcall target="compile-all"/>
+		<antcall target="deploy-all"/>
+	</target>
+	
 </project>

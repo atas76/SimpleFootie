@@ -5,7 +5,11 @@ import java.util.Map;
 
 public class Resources {
 	
-	public static final String resourcesDataRoot = "./resources/data";
+	private static String resourcesDataRoot = "./resources/data";
+	
+	public static void setResourcesDataRoot(String resourcesDataRoot) {
+		Resources.resourcesDataRoot = resourcesDataRoot;
+	}
 	
 	public static final String DB = "db";
 	public static final String HOME_SCORED_AVG = "homeScoredAvg";

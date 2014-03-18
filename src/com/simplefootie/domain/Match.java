@@ -60,11 +60,19 @@ public class Match {
 	}
 
 	public void setHomeTeam(String homeTeamName) {
-		this.homeTeam = new Team(homeTeamName);
+		this.homeTeam = Environment.getCompetition(label).getTeamByName(homeTeamName);
 	}
 	
 	public void setAwayTeam(String awayTeamName) {
-		this.awayTeam = new Team(awayTeamName);
+		this.awayTeam = Environment.getCompetition(label).getTeamByName(awayTeamName);
+	}
+	
+	public void setVenue(Ground venue) {
+		this.venue = venue;
+	}
+	
+	public void setLabel(String label) {
+		this.label = label;
 	}
 	
 	public String getHomeTeamName() {
@@ -184,7 +192,7 @@ public class Match {
 				throw new DataException(fnex);
 			} catch (IOException ioex) {
 				throw new DataException(ioex);
-			}
+			} 
 		}
 		
 		if (lowScore < 0) {
