@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.simplefootie.domain.exceptions.TeamNotFoundException;
+
 /**
  * Grouping of teams belonging to a particular competition. 
  * A team in the environment should always be part of one or more competitions. This is good for two reasons: Firstly, grouping of teams and second calculating
@@ -87,5 +89,21 @@ public class Competition {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Gets a team object based on the team's short name from the teams associated with the current competition.
+	 * 
+	 * @param shortName For simplicity, we usually use a designated 'short name' for teams, esp. where a human user is involved.
+	 * @return the team object the team object as contained in the current Competition object
+	 */
+	public Team getTeamByShortName(String shortName) throws TeamNotFoundException {
+		for (Team team:this.teams) {
+			if (team.getShortName().equals(shortName)) {
+				return team;
+			}
+		}
+		// No team found
+		throw new TeamNotFoundException(shortName);
 	}
 }

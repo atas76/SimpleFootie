@@ -32,10 +32,19 @@ public class Match {
 	private int homeTeamScore = 0;
 	private int awayTeamScore = 0;
 	
-	public Match(Team homeTeam, Team awayTeam, Ground venue) {
+	/**
+	 * Initialize match, passing the team objects directly.
+	 * 
+	 * @param homeTeam the home team object
+	 * @param awayTeam the away team object
+	 * @param venue either the home team's venue or a neutral one
+	 * @param label to be used as a description of the match, but most importantly used to lookup the teams' details by specifying the competition in which they belong
+	 */
+	public Match(Team homeTeam, Team awayTeam, Ground venue, String label) {
 		this.homeTeam = homeTeam;
 		this.awayTeam = awayTeam;
 		this.venue = venue;
+		this.label = label;
 	}
 	
 	/**
