@@ -1,0 +1,12 @@
+release 0.2
+-----------
+
+bug fixes: 
+	(simplified and corrected) match calculation in neutral ground
+
+web:
+	support for neutral venues in web application interface
+	
+console:
+	command-line arguments support
+	
