@@ -1,67 +1,80 @@
 ﻿<?xml version="1.0"?>
 <Leagues>
 	<League name='Bundesliga'>
-		<Team name='Hamburger SV' shortName='Hamburger' city = 'Hamburg' reputation="32185"/>
-		<Team name='Werder Bremen' shortName='Werder' city = 'Bremen' reputation="37185"/>
-		<Team name='Freiburg' shortName='Freiburg' city = 'Freiburg im Breisgau' reputation="16185"/>
+		<Team name='Hamburger SV' shortName='Hamburger' city = 'Hamburg' reputation="55922"/>
+		<Team name='Werder Bremen' shortName='Werder' city = 'Bremen' reputation="60922"/>
+		<Team name='Freiburg' shortName='Freiburg' city = 'Freiburg im Breisgau' reputation="21156"/>
 		<Team name='Nürnberg' shortName='Nurnberg' city = 'Nürnberg' reputation=""/>
 		<Team name='Eintracht Braunschweig' shortName='Braunschweig' city = 'Braunschweig' reputation=""/>
-		<Team name='Wolfsburg' shortName='Wolfsburg' city = 'Wolfsburg' reputation="30299"/>
-		<Team name='Schalke 04' shortName='Schalke' city = 'Gelsenkirchen' reputation="85299"/>
-		<Team name='Eintracht Frankfurt' shortName='Frankfurt' city = 'Frankfurt am Main' reputation="16299"/>
-		<Team name='Bayer Leverkusen' shortName='Leverkusen' city = 'Leverkusen' reputation="56299"/>
-		<Team name='Hertha BSC' shortName='Hertha' city = 'Berlin' reputation="22299"/>
-		<Team name='Borussia Dortmund' shortName='Dortmund' city = 'Dortmund' reputation="64299"/>
+		<Team name='Wolfsburg' shortName='Wolfsburg' city = 'Wolfsburg' reputation="41922"/>
+		<Team name='Schalke 04' shortName='Schalke' city = 'Gelsenkirchen' reputation="84922"/>
+		<Team name='Eintracht Frankfurt' shortName='Frankfurt' city = 'Frankfurt am Main' reputation="28156"/>
+		<Team name='Bayer Leverkusen' shortName='Leverkusen' city = 'Leverkusen' reputation="53922"/>
+		<Team name='Hertha BSC' shortName='Hertha' city = 'Berlin' reputation="28922"/>
+		<Team name='Borussia Dortmund' shortName='Dortmund' city = 'Dortmund' reputation="61922"/>
 		<Team name='Hoffenheim' shortName='Hoffenheim' city = 'Sinsheim' reputation=""/>
-		<Team name='Mainz 05' shortName='Mainz' city = 'Mainz' reputation="15299"/>
-		<Team name='Stuttgart' shortName='Stuttgart' city = 'Stuttgart' reputation="51799"/>
-		<Team name='Hannover 96' shortName='Hannover' city = 'Hannover' reputation="40299"/>
-		<Team name='Borussia Mönchengladbach' shortName='Gladbach' city = 'Mönchengladbach' reputation="23299"/>
+		<Team name='Mainz 05' shortName='Mainz' city = 'Mainz' reputation="16922"/>
+		<Team name='Stuttgart' shortName='Stuttgart' city = 'Stuttgart' reputation="59922"/>
+		<Team name='Hannover 96' shortName='Hannover' city = 'Hannover' reputation="41922"/>
+		<Team name='Borussia Mönchengladbach' shortName='Gladbach' city = 'Mönchengladbach' reputation="24922"/>
 		<Team name='Augsburg' shortName='Augsburg' city = 'Augsburg' reputation=""/>
-		<Team name='Bayern München' shortName='Bayern' city = 'München' reputation="131299"/>
+		<Team name='Bayern München' shortName='Bayern' city = 'München' reputation="146922"/>
 	</League>
 	<League name='Premier League'>
 		<Team name='Cardiff City' shortName='Cardiff' city = 'Cardiff (Caerdydd)' reputation=""/>
-		<Team name='Stoke City' shortName='Stoke' city = 'Stoke-on-Trent, Staffordshire' reputation="22664"/>
+		<Team name='Stoke City' shortName='Stoke' city = 'Stoke-on-Trent, Staffordshire' reputation="24592"/>
 		<Team name='Hull City' shortName='Hull' city = 'Hull' reputation=""/>
 		<Team name='West Ham United' shortName='West Ham' city = 'London' reputation=""/>
 		<Team name='Southampton' shortName='Southampton' city = 'Southampton, Hampshire' reputation=""/>
-		<Team name='Tottenham Hotspur' shortName='Tottenham' city = 'London' reputation="60664"/>
-		<Team name='Aston Villa' shortName='Aston Villa' city = 'Birmingham' reputation="17664"/>
+		<Team name='Tottenham Hotspur' shortName='Tottenham' city = 'London' reputation="69592"/>
+		<Team name='Aston Villa' shortName='Aston Villa' city = 'Birmingham' reputation="27592"/>
 		<Team name='Norwich City' shortName='Norwich' city = 'Norwich, Norfolk' reputation=""/>
-		<Team name='Arsenal' shortName='Arsenal' city = 'London' reputation="100664"/>
-		<Team name='Fulham' shortName='Fulham' city = 'London' reputation="43664"/>
-		<Team name='Chelsea' shortName='Chelsea' city = 'London' reputation="119664"/>
-		<Team name='Newcastle United' shortName='Newcastle' city = 'Newcastle-upon-Tyne' reputation="29664"/>
-		<Team name='Manchester United' shortName='Manchester United' city = 'Manchester' reputation="109664"/>
-		<Team name='Swansea City' shortName='Swansea' city = 'Swansea' reputation="16664"/>
-		<Team name='Everton' shortName='Everton' city = 'Liverpool' reputation="22664"/>
+		<Team name='Arsenal' shortName='Arsenal' city = 'London' reputation="113592"/>
+		<Team name='Fulham' shortName='Fulham' city = 'London' reputation="45592"/>
+		<Team name='Chelsea' shortName='Chelsea' city = 'London' reputation="137592"/>
+		<Team name='Newcastle United' shortName='Newcastle' city = 'Newcastle-upon-Tyne' reputation="31592"/>
+		<Team name='Manchester United' shortName='Manchester United' city = 'Manchester' reputation="130592"/>
+		<Team name='Swansea City' shortName='Swansea' city = 'Swansea' reputation="23806"/>
+		<Team name='Everton' shortName='Everton' city = 'Liverpool' reputation="25592"/>
 		<Team name='Sunderland' shortName='Sunderland' city = 'Sunderland' reputation=""/>
 		<Team name='Crystal Palace' shortName='Crystal Palace' city = 'London' reputation=""/>
-		<Team name='Manchester City' shortName='Manchester City' city = 'Manchester' reputation="57664"/>
-		<Team name='Liverpool' shortName='Liverpool' city = 'Liverpool' reputation="56664"/>
+		<Team name='Manchester City' shortName='Manchester City' city = 'Manchester' reputation="70592"/>
+		<Team name='Liverpool' shortName='Liverpool' city = 'Liverpool' reputation="78592"/>
 		<Team name='West Bromwich Albion' shortName='WBA' city = 'West Bromwich' reputation=""/>
 	</League>
 	<League name='La Liga'>
 		<Team name='Celta de Vigo' shortName='Celta' city = 'Vigo' reputation=""/>
-		<Team name='Villarreal' shortName='Villarreal' city = 'Villarreal' reputation="49999"/>
-		<Team name='Barcelona' shortName='Barcelona' city = 'Barcelona' reputation="137999"/>
-		<Team name='Levante' shortName='Levante' city = 'Valencia' reputation="28999"/>
+		<Team name='Villarreal' shortName='Villarreal' city = 'Villarreal' reputation="67605"/>
+		<Team name='Barcelona' shortName='Barcelona' city = 'Barcelona' reputation="157605"/>
+		<Team name='Levante' shortName='Levante' city = 'Valencia' reputation="30605"/>
 		<Team name='Osasuna' shortName='Osasuna' city = 'Pamplona' reputation=""/>
-		<Team name='Atlético Madrid' shortName='Atletico Madrid' city = 'Madrid' reputation="90999"/>
-		<Team name='Real Madrid' shortName='Real Madrid' city = 'Madrid' reputation="128999"/>
-		<Team name='Athletic Club' shortName='Athletic Club' city = 'Bilbao' reputation="50999"/>
-		<Team name='Sevilla' shortName='Sevilla' city = 'Sevilla' reputation="47499"/>
+		<Team name='Atlético Madrid' shortName='Atletico Madrid' city = 'Madrid' reputation="99605"/>
+		<Team name='Real Madrid' shortName='Real Madrid' city = 'Madrid' reputation="136605"/>
+		<Team name='Athletic Club' shortName='Athletic Club' city = 'Bilbao' reputation="52605"/>
+		<Team name='Sevilla' shortName='Sevilla' city = 'Sevilla' reputation="55105"/>
 		<Team name='Elche' shortName='Elche' city = 'Elche' reputation=""/>
 		<Team name='Rayo Vallecano' shortName='Rayo Vallecano' city = 'Madrid' reputation=""/>
-		<Team name='Real Sociedad' shortName='Real Sociedad' city = 'Donostia-San Sebastián' reputation="19999"/>
+		<Team name='Real Sociedad' shortName='Real Sociedad' city = 'Donostia-San Sebastián' reputation="23656"/>
 		<Team name='Real Valladolid' shortName='Real Valladolid' city = 'Valladolid' reputation=""/>
 		<Team name='Real Betis' shortName='Real Betis' city = 'Sevilla' reputation="17999"/>
-		<Team name='Málaga' shortName='Malaga' city = 'Málaga' reputation="37999"/>
-		<Team name='Getafe' shortName='Getafe' city = 'Getafe (Madrid)' reputation="20999"/>
+		<Team name='Málaga' shortName='Malaga' city = 'Málaga' reputation="39605"/>
+		<Team name='Getafe' shortName='Getafe' city = 'Getafe (Madrid)' reputation="22605"/>
 		<Team name='Espanyol' shortName='Espanyol' city = 'Cornellà de Llobregat' reputation=""/>
 		<Team name='Granada' shortName='Granada' city = 'Granada' reputation=""/>
-		<Team name='Valencia' shortName='Valencia' city = 'Valencia' reputation="91999"/>
+		<Team name='Valencia' shortName='Valencia' city = 'Valencia' reputation="102605"/>
 		<Team name='Almería' shortName='Almeria' city = 'Almería' reputation=""/>
+	</League>
+	<League name='Serie A'>
+		<Team name='Internazionale' shortName='Inter' city = 'Milan' reputation="105829"/>
+		<Team name='AC Milan' shortName='Milan' city = 'Milan' reputation="93829"/>
+		<Team name='Juventus' shortName='Juventus' city='Torino' reputation="70829"/>
+		<Team name='AS Roma' shortName='Roma' city='Rome' reputation="53329"/>
+		<Team name='Napoli' shortName='Napoli' city='Napoli' reputation="46829"/>
+		<Team name='Udinese' shortName='Udinese' city='Udine' reputation="42829"/>
+		<Team name='Fiorentina' shortName='Florence' city='Fiorentina' reputation="42829"/>
+		<Team name='Lazio' shortName='Lazio' city='Rome' reputation="41829"/>
+		<Team name='Sampdoria' shortName='Sampdoria' city='Genoa' reputation="25829"/>
+		<Team name='Palermo' shortName='Palermo' city='Palermo' reputation="18829"/>
+		<Team name='Genoa' shortName='Genoa' city='Genoa' reputation="17829"/>
 	</League>
 </Leagues>
