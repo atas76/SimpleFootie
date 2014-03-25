@@ -104,4 +104,16 @@
 		<Team name="Guingamp" shortName="Guingamp" city="Guingamp" reputation="13300"/>
 		<Team name="OSG Nice" shortName="Nice" city="Nice" reputation="12733"/>
 	</League>
+	<League name='Premier League (Russia)'>
+		<Team name='CSKA Moscow' shortName='CSKA Moscow' city='Moscow' reputation="77766"/>
+		<Team name='Zenit St. Petersburg' shortName='Zenit' city='St. Petersburg' reputation="70766"/>
+		<Team name='Rubin Kazan' shortName='Rubin Kazan' city='Kazan' reputation="58266"/>
+		<Team name='Spartak Moscow' shortName='Spartak Moscow' city='Moscow' reputation="40766"/>
+		<Team name='Lokomotiv Moscow' shortName='Lokomotiv Moscow' city='Moscow' reputation="20766"/>
+		<Team name='Anzhi Makhachkala' shortName='Anzhi' city='Kaspiysk' reputation="20266"/>
+		<Team name='Dinamo Moscow' shortName='Dinamo Moscow' city='Moscow' reputation="12266"/>
+		<Team name='Amkar Perm' shortName='Amkar' city='Perm' reputation="10766"/>
+		<Team name='Krylya Sovetov' shortName='Krylya' city='Samara' reputation="10266"/>
+		<Team name='Kuban Krasnodar' shortName='Kuban' city='Krasnodar' reputation="14399"/>
+	</League>
 </Leagues>
