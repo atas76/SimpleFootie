@@ -77,4 +77,17 @@
 		<Team name='Palermo' shortName='Palermo' city='Palermo' reputation="18829"/>
 		<Team name='Genoa' shortName='Genoa' city='Genoa' reputation="17829"/>
 	</League>
+	<League name='Primeira Liga'>
+		<Team name='FC Porto' shortName='Porto' city='Porto' reputation="104833"/>
+		<Team name='Benfica' shortName='Benfica' city='Lisbon' reputation="102833"/>
+		<Team name='Sporting Lisbon' shortName='Sporting' city='Lisbon' reputation="69833"/>
+		<Team name='Sporting Braga' shortName='Braga' city='Braga' reputation="62833"/>
+		<Team name='Marítimo Funchal' shortName='Maritimo' city='Funchal' reputation="18333"/>
+		<Team name='Académica Coimbra' shortName='Academica' city='Coimbra' reputation="15833"/>
+		<Team name='Vitória Guimarães' shortName='Guimaraes' city='Guimarães' reputation="14333"/>
+		<Team name='Paços de Ferreira' shortName='Pacos de Ferreira' city='Paços de Ferreira' reputation="12833"/>
+		<Team name='Vitória Setúbal' shortName='Vitoria Setubal' city="Setúbal" reputation="12833"/>
+		<Team name='Nacional Funchal' shortName='Nacional' city="Funchal" reputation="17559"/>
+		<Team name="Estoril Praia" shortName='Estoril' city='Estoril' reputation="15059"/>
+	</League>
 </Leagues>
