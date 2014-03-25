@@ -90,4 +90,18 @@
 		<Team name='Nacional Funchal' shortName='Nacional' city="Funchal" reputation="17559"/>
 		<Team name="Estoril Praia" shortName='Estoril' city='Estoril' reputation="15059"/>
 	</League>
+	<League name='Ligue 1'>
+		<Team name='Olympique Lyon' shortName='Lyon' city='Lyon' reputation="95800"/>
+		<Team name='Olympique Marseille' shortName='Marseille' city='Marseille' reputation="78800"/>
+		<Team name="Paris Saint-Germain" shortName="PSG" city='Paris' reputation="71800"/>
+		<Team name="Girondins Bordeaux" shortName='Bordeaux' city='Bordeaux' reputation="59800"/>
+		<Team name="Lille OSC" shortName="Lille" city="Lille" reputation="45800"/>
+		<Team name="AS Saint-Étienne" shortName="Saint-Etienne" city="Saint-Étienne" reputation="26800"/>
+		<Team name="Montpellier" shortName="Montpellier" city="Montpellier" reputation="18800"/>
+		<Team name="Stade Rennais" shortName="Rennes" city="Rennes" reputation="16800"/>
+		<Team name="Toulouse" shortName="Toulouse" city="Toulouse" reputation="16800"/>
+		<Team name="Sochaux" shortName="Sochaux" city="Montbéliard" reputation="13300"/>
+		<Team name="Guingamp" shortName="Guingamp" city="Guingamp" reputation="13300"/>
+		<Team name="OSG Nice" shortName="Nice" city="Nice" reputation="12733"/>
+	</League>
 </Leagues>
