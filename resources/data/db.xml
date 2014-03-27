@@ -116,4 +116,17 @@
 		<Team name='Krylya Sovetov' shortName='Krylya' city='Samara' reputation="10266"/>
 		<Team name='Kuban Krasnodar' shortName='Kuban' city='Krasnodar' reputation="14399"/>
 	</League>
+	<League name='Eredivisie'>
+		<Team name='Ajax' shortName='Ajax' city='Amsterdam' reputation='64945'/>
+		<Team name='PSV Eindhoven' shortName='PSV' city='Eindhoven' reputation='64945'/>
+		<Team name='FC Twente' shortName='Twente' city='Enschede' reputation='58945'/>
+		<Team name='AZ Alkmaar' shortName='Alkmaar' city='Alkmaar' reputation='39445'/>
+		<Team name='Heerenveen' shortName='Heerenveen' city='Heerenveen' reputation='19445'/>
+		<Team name='NEC Nijmegen' shortName='Nijmegen' city='Nijmegen' reputation='15945'/>
+		<Team name='Feyenoord' shortName='Feyenoord' city='Rotterdam' reputation='13945'/>
+		<Team name='FC Utrecht' shortName='Utrecht' city='Utrecht' reputation='13945'/>
+		<Team name='NAC Breda' shortName='Breda' city='Breda' reputation='10445'/>
+		<Team name='Vitesse Arnhem' shortName='Vitesse' city='Arnhem' reputation='9945'/>
+		<Team name='ADO Den Haag' shortName='Den Haag' city='Den Haag' reputation='9945'/>
+	</League>
 </Leagues>
