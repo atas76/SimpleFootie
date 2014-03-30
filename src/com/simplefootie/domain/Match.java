@@ -1,15 +1,11 @@
 package com.simplefootie.domain;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Map;
-import java.util.logging.Level;
+import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import com.simplefootie.data.DataException;
-import com.simplefootie.data.MatchData;
 import com.simplefootie.domain.exceptions.InvalidTeamRankingException;
-import com.simplefootie.outcomes.StatsOutcome;
 
 
 /**
@@ -147,150 +143,40 @@ public class Match {
 			throw new InvalidTeamRankingException();
 		}
 		
-		double capacityDivergence = (double) homeTeamRanking / (double) awayTeamRanking;
+		double capacityRatio = (double) homeTeamRanking / (double) awayTeamRanking;
 		
-		logger.config("Capacity divergence: " + capacityDivergence);
+		logger.config("Capacity divergence: " + capacityRatio);
 		
-		Map<Integer, Integer> goalDifferenceDistribution1;
-		Map<Integer, Integer> scoreEntropiesDistribution1;
+		List<Score> sampleScores = competition.getScoreSample().filterByCapacity(capacityRatio).getScores();
 		
-		Map<Integer, Integer> goalDifferenceDistribution2;
-		Map<Integer, Integer> scoreEntropiesDistribution2;
+		// Pick one random score from the sample and we are done
 		
-		if (capacityDivergence <= 0.5) {
-			
-			goalDifferenceDistribution1 = competition.getGoalDifferenceDistribution(0);
-			scoreEntropiesDistribution1 = competition.getEntropiesDistribution(0);
-			
-			goalDifferenceDistribution2 = competition.getGoalDifferenceDistribution(3);
-			scoreEntropiesDistribution2 = competition.getEntropiesDistribution(3);
-			
-		} else if (capacityDivergence <= 1) {
-			
-			goalDifferenceDistribution1 = competition.getGoalDifferenceDistribution(1);
-			scoreEntropiesDistribution1 = competition.getEntropiesDistribution(1);
-			
-			goalDifferenceDistribution2 = competition.getGoalDifferenceDistribution(2);
-			scoreEntropiesDistribution2 = competition.getEntropiesDistribution(2);
-			
-		} else if (capacityDivergence <= 2) {
-			
-			goalDifferenceDistribution1 = competition.getGoalDifferenceDistribution(2);
-			scoreEntropiesDistribution1 = competition.getEntropiesDistribution(2);
-			
-			goalDifferenceDistribution2 = competition.getGoalDifferenceDistribution(1);
-			scoreEntropiesDistribution2 = competition.getGoalDifferenceDistribution(1);
-			
-		} else {
-			
-			goalDifferenceDistribution1 = competition.getGoalDifferenceDistribution(3);
-			scoreEntropiesDistribution1 = competition.getEntropiesDistribution(3);
-			
-			goalDifferenceDistribution2 = competition.getGoalDifferenceDistribution(0);
-			scoreEntropiesDistribution2 = competition.getGoalDifferenceDistribution(0);
-		}
+		Random rnd = new Random();
 		
-		int goalDifference;
+		Score matchedScore = sampleScores.get(rnd.nextInt(sampleScores.size()));
 		
-		int goalDifference1 = StatsOutcome.getResultFromDistribution(goalDifferenceDistribution1);
-		int scoreEntropy1 = StatsOutcome.getResultFromDistribution(scoreEntropiesDistribution1);
-		
-		int goalDifference2 = StatsOutcome.getResultFromDistribution(goalDifferenceDistribution2);
-		int scoreEntropy2 = StatsOutcome.getResultFromDistribution(scoreEntropiesDistribution2);
-		
-		logger.config("Goal difference 1: " + goalDifference1);
-		logger.config("Score entropy 1: " + scoreEntropy1);
-		
-		logger.config("Goal difference 2: " + goalDifference2);
-		logger.config("Score entropy 2: " + scoreEntropy2);
-		
-		int lowScore = 0;
-		int highScore = 0;
-		
-		int lowScore1 = 0;
-		int highScore1 = Math.abs(goalDifference1);
-		
-		int lowScore2 = 0;
-		int highScore2 = Math.abs(goalDifference2);
-		
-		lowScore1 += scoreEntropy1;
-		highScore1 += scoreEntropy1;
-		
-		lowScore2 += scoreEntropy2;
-		highScore2 += scoreEntropy2;
+		this.homeTeamScore = matchedScore.getHomeScore();
+		this.awayTeamScore = matchedScore.getAwayScore();
 		
 		// Now for the interesting part: neutral ground filtering
-		
 		double homeGoalsAverageFactor = 1;
 		double awayGoalsAverageFactor = 1;
 		
-		logger.config("High score 1: " + highScore1);
-		logger.config("High score 2: " + highScore2);
-		
-		logger.config("Low score 1: " + lowScore1);
-		logger.config("Low score 2: " + lowScore2);
-		
 		if (this.venue != null && this.venue.equals(Ground.NEUTRAL_GROUND)) {
 			
-			goalDifference = goalDifference1 - goalDifference2;
+			double reverseCapacityRatio = 1 / capacityRatio;
 			
-			logger.config("Total goal difference: " + goalDifference);
+			List<Score> reverseSampleScores = competition.getScoreSample().filterByCapacity(reverseCapacityRatio).getScores();
 			
-			if (goalDifference1 >= 0 && goalDifference2 >= 0) {
-				
-				if (goalDifference1 >= goalDifference2) {
-					highScore = highScore1 + lowScore2;
-					lowScore = highScore2 + lowScore1;
-				} else {
-					highScore = highScore2 + lowScore1;
-					lowScore = highScore1 + lowScore2;
-				}
-			} else if (goalDifference1 >= 0 && goalDifference2 < 0) {
-				highScore = highScore1 + highScore2;
-				lowScore = lowScore1 + lowScore2;
-			} else if (goalDifference1 < 0 && goalDifference2 >= 0) {
-				highScore = highScore1 + highScore2;
-				lowScore = lowScore1 + lowScore2;
-			} else if (goalDifference1 < 0 && goalDifference2 < 0) {
-				if (goalDifference1 >= goalDifference2) {
-					highScore = highScore1 + lowScore2;
-					lowScore = highScore2 + lowScore1;
-				} else {
-					highScore = highScore2 + lowScore1;
-					lowScore = highScore1 + lowScore2;
-				}
-			}
+			Score complementScore = sampleScores.get(rnd.nextInt(reverseSampleScores.size()));
 			
-			homeGoalsAverageFactor = 0.5; // KISS principle
-			awayGoalsAverageFactor = 0.5; // Ditto
+			this.homeTeamScore += complementScore.getAwayScore();
+			this.awayTeamScore += complementScore.getHomeScore();
 			
-		} else {
-			goalDifference = goalDifference1;
-			lowScore = lowScore1;
-			highScore = highScore1;
-		}
+			homeGoalsAverageFactor = 0.5;
+			awayGoalsAverageFactor = 0.5; 
+		} 
 		
-		if (lowScore < 0) {
-			lowScore = 0;
-		}
-		
-		if (highScore < 0) {
-			highScore = 0;
-		}
-		
-		logger.config("High score: " + highScore);
-		logger.config("Low score: " + lowScore);
-		
-		logger.config("Home goals average factor: " + homeGoalsAverageFactor);
-		logger.config("Away goals average factor: " + awayGoalsAverageFactor);
-		
-		if (goalDifference >= 0) {
-			homeTeamScore = highScore;
-			awayTeamScore = lowScore;
-		} else {
-			homeTeamScore = lowScore;
-			awayTeamScore = highScore;
-		}
 		this.homeTeamScore *= homeGoalsAverageFactor;
 		this.awayTeamScore *= awayGoalsAverageFactor;
 	}

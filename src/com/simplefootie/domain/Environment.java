@@ -2,12 +2,10 @@ package com.simplefootie.domain;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,6 +15,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.simplefootie.Resources;
+import com.simplefootie.data.ScoresPersistence;
 
 /**
  * 
@@ -58,102 +57,18 @@ public class Environment {
 		
 		List<Team> teams = Leagues.getAllTeams(environmentDocument);
 		
+		// Use this sorting by default (as a 'universal' one), but to be changed per competition 
 		Collections.sort(teams);
 		
-		Competition friendlyCompetition = new Competition();
+		List<Score> scoreSample = ScoresPersistence.read(Resources.getDataResource(Resources.UNIVERSAL_SCORE_SAMPLES));
+		
+		// Friendly competition
+		Competition friendlyCompetition = new Competition(RankingMode.UEFA);
 		friendlyCompetition.setTeams(teams);
 		
-		// Hardcode everything for the time being
-		
-		List<Map<Integer, Integer>> goalDifferences = new ArrayList<Map<Integer, Integer>>();
-		List<Map<Integer, Integer>> scoreEntropies = new ArrayList<Map<Integer, Integer>>();
-		
-		Map<Integer, Integer> strongHomeGoalDifferences = new TreeMap<Integer, Integer>();
-		Map<Integer, Integer> weakHomeGoalDifferences = new TreeMap<Integer, Integer>();
-		Map<Integer, Integer> strongAwayDifferences = new TreeMap<Integer, Integer>();
-		Map<Integer, Integer> weakAwayDifferences = new TreeMap<Integer, Integer>();
-		
-		strongHomeGoalDifferences.put(-2, 1);
-		strongHomeGoalDifferences.put(-1, 2);
-		strongHomeGoalDifferences.put(0, 10);
-		strongHomeGoalDifferences.put(1, 8);
-		strongHomeGoalDifferences.put(2, 8);
-		strongHomeGoalDifferences.put(3, 5);
-		strongHomeGoalDifferences.put(4, 5);
-		strongHomeGoalDifferences.put(5, 4);
-		
-		goalDifferences.add(strongHomeGoalDifferences);
-		
-		weakHomeGoalDifferences.put(-2, 2);
-		weakHomeGoalDifferences.put(-1, 4);
-		weakHomeGoalDifferences.put(0, 8);
-		weakHomeGoalDifferences.put(1, 8);
-		weakHomeGoalDifferences.put(2, 5);
-		weakHomeGoalDifferences.put(3, 2);
-		weakHomeGoalDifferences.put(4, 2);
-		
-		goalDifferences.add(weakHomeGoalDifferences);
-		
-		weakAwayDifferences.put(-4, 1);
-		weakAwayDifferences.put(-3, 1);
-		weakAwayDifferences.put(-2, 1);
-		weakAwayDifferences.put(-1, 8);
-		weakAwayDifferences.put(0, 14);
-		weakAwayDifferences.put(1, 11);
-		weakAwayDifferences.put(2, 8);
-		weakAwayDifferences.put(3, 8);
-		
-		goalDifferences.add(weakAwayDifferences);
-		
-		strongAwayDifferences.put(-5, 1);
-		strongAwayDifferences.put(-4, 2);
-		strongAwayDifferences.put(-3, 3);
-		strongAwayDifferences.put(-2, 6);
-		strongAwayDifferences.put(-1, 13);
-		strongAwayDifferences.put(0, 11);
-		strongAwayDifferences.put(1, 7);
-		strongAwayDifferences.put(2, 2);
-		
-		goalDifferences.add(strongAwayDifferences);
-		
-		Map<Integer, Integer> strongHomeEntropies = new HashMap<Integer, Integer>();
-		Map<Integer, Integer> weakHomeEntropies = new HashMap<Integer, Integer>();
-		Map<Integer, Integer> strongAwayEntropies = new HashMap<Integer, Integer>();
-		Map<Integer, Integer> weakAwayEntropies = new HashMap<Integer, Integer>();
-		
-		strongHomeEntropies.put(-2, 1);
-		strongHomeEntropies.put(-1, 6);
-		strongHomeEntropies.put(0, 18);
-		strongHomeEntropies.put(1, 15);
-		strongHomeEntropies.put(2, 2);
-		strongHomeEntropies.put(3, 1);
-		
-		scoreEntropies.add(strongHomeEntropies);
-		
-		weakHomeEntropies.put(-1, 9);
-		weakHomeEntropies.put(0, 17);
-		weakHomeEntropies.put(1, 4);
-		weakHomeEntropies.put(2, 1);
-		
-		scoreEntropies.add(weakHomeEntropies);
-		
-		weakAwayEntropies.put(-1, 14);
-		weakAwayEntropies.put(0, 23);
-		weakAwayEntropies.put(1, 8);
-		weakAwayEntropies.put(2, 1);
-		
-		scoreEntropies.add(weakAwayEntropies);
-		
-		strongAwayEntropies.put(-1, 11);
-		strongAwayEntropies.put(0, 24);
-		strongAwayEntropies.put(1, 9);
-		strongAwayEntropies.put(2, 1);
-		
-		scoreEntropies.add(strongAwayEntropies);
-		
-		friendlyCompetition.setExpectedGoalDifferences(goalDifferences);
-		friendlyCompetition.setExpectedEntropies(scoreEntropies);
-		
+		// In the future we will provide for filtering options of the sample scores
+		friendlyCompetition.setScoreSample(scoreSample);
+	
 		competitions.put(Competitions.FRIENDLY, friendlyCompetition);
 	}
 	

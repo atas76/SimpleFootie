@@ -1,13 +1,18 @@
 package com.simplefootie.domain;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.simplefootie.data.ScoreSample;
 import com.simplefootie.domain.exceptions.TeamNotFoundException;
+import com.simplefootie.domain.tournament.CompetitionStage;
 
 /**
  * Grouping of teams belonging to a particular competition. 
+ * UPDATE: The above is a bit of restrictive use of competition. A competition is a lot more than the teams that participate in it. An update in the design needs to take
+ * place.
+ * <p/>  
  * A team in the environment should always be part of one or more competitions. This is good for two reasons: Firstly, grouping of teams and second calculating
  * the relative strengths of teams within the same group. So, a team does not have an "absolute" strength but its performance is calculated based on relative
  * strength to other teams in the same group of teams, identified by participation in a specific competition. For the time being, only friendly matches are 
@@ -18,46 +23,44 @@ import com.simplefootie.domain.exceptions.TeamNotFoundException;
  */
 public class Competition {
 	
-	private List<Team> teams;
-	private List<Map<Integer, Integer>> expectedGoalDifferences = new ArrayList<Map<Integer, Integer>>();
-	private List<Map<Integer, Integer>> expectedEntropies = new ArrayList<Map<Integer, Integer>>();
+	private RankingMode rankingMode;
+	private Map<RankingMode, List<Team>> rankings = new HashMap<RankingMode, List<Team>>();
 	
+	private List<Team> teams;
+	private List<CompetitionStage> stage;
+	private ScoreSample scoreSample;
+	
+	/**
+	 * Each competition must have a ranking mode, so that participating teams are ranked and sorted
+	 * 
+	 * @param rankingMode one of the various ranking modes supported
+	 */
+	public Competition(RankingMode rankingMode) {
+		this.rankingMode = rankingMode;
+	}
+	
+	public void setScoreSample(List<Score> sample) {
+		this.scoreSample = new ScoreSample(sample);
+	}
+	
+	public ScoreSample getScoreSample() {
+		return this.scoreSample;
+	}
+	
+	/**
+	 * 
+	 * Setting the teams is not enough. We must created their ranking on the fly. 
+	 * 
+	 * @param teams The teams will remain 'sorted' for backwards compatibility.
+	 */
 	public void setTeams(List<Team> teams) {
+		// For the time being we support only UEFA ranking by default
 		this.teams = teams;
+		rankings.put(RankingMode.UEFA, teams);
 	}
 	
 	public List<Team> getTeams() {
 		return this.teams;
-	}
-	
-	public void setExpectedGoalDifferences(List<Map<Integer, Integer>> expectedGoalDifferences) {
-		this.expectedGoalDifferences = expectedGoalDifferences;
-	}
-	
-	public void setExpectedEntropies(List<Map<Integer, Integer>> expectedEntropies) {
-		this.expectedEntropies = expectedEntropies;
-	}
-	
-	/**
-	 * Getter for a map between goal difference and cardinality of matches having a specific goal difference in the sample.
-	 * 
-	 * @param index an index denoting a grouping of matches based on opponent teams' ranking ratios
-	 * @return map of goal differences to number of matches having this goal difference in the sample. Away team wins are represented as negative goal difference.
-	 */
-	public Map<Integer, Integer> getGoalDifferenceDistribution(int index) {
-		return expectedGoalDifferences.get(index);
-	}
-	
-	/**
-	 * Getter for a map between score "entropies" and cardinality of matches with this specific "entropy" in the sample. 
-	 * The concept is used for calculating number of goals scored on top of calculated goal difference (2-0, 3-1, 4-2, etc.), but it will likely be
-	 * dropped from future logic as it adds unnecessary complexity (or probably replaced by much simpler and clearer logic).
-	 *   
-	 * @param index An index denoting a grouping of matches based on opponent teams' ranking ratios
-	 * @return a number specific to a distribution of scores, for calculating the total number of goals scored on top of goal difference
-	 */
-	public Map<Integer, Integer> getEntropiesDistribution(int index) {
-		return expectedEntropies.get(index);
 	}
 	
 	/**
@@ -68,12 +71,26 @@ public class Competition {
 	 * @return the ranking of a team in the competition. Should be a positive non-zero integer.
 	 */
 	public int getTeamRanking(String teamName) {
-		for (Team team:this.teams) {
+		
+		List<Team> rankedTeams = this.rankings.get(this.rankingMode);
+		
+		for (Team team:rankedTeams) {
 			if (team.getName().equals(teamName)) {
-				return teams.indexOf(team) + 1; 
+				return rankedTeams.indexOf(team) + 1; 
 			}
 		}
 		return 0;
+	}
+	
+	/**
+	 * 
+	 * We need this method, in case we want to combine rankings externally for calculating matches on a case-by-case basis
+	 * 
+	 * @param rankingMode We need to specify the ranking mode as it would normally be a 'custom' one: the competition ranking will be a mixed one
+	 * @return a list of teams sorted according to the specified custom ranking
+	 */
+	public List<Team> getRanking(RankingMode rankingMode) {
+		return this.getRanking(rankingMode);
 	}
 	
 	/**
