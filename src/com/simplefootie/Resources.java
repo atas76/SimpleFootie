@@ -12,15 +12,15 @@ public class Resources {
 	}
 	
 	public static final String DB = "db";
-	public static final String HOME_SCORED_AVG = "homeScoredAvg";
-	public static final String HOME_CONCEDED_AVG = "homeConcededAvg";
+	public static final String UNIVERSAL_SCORE_SAMPLES = "uniScoreSamples";
+	public static final String TEST_SCORE_SAMPLES = "testScoreSamples";
 	
 	private static final Map<String, String> dataResources = new HashMap<String, String>();
 	
 	static {
 		dataResources.put(DB, "db.xml");
-		dataResources.put(HOME_SCORED_AVG, "scored averages.sjon");
-		dataResources.put(HOME_CONCEDED_AVG, "conceded averages.sjon");
+		dataResources.put(UNIVERSAL_SCORE_SAMPLES, "universal.sco");
+		dataResources.put(TEST_SCORE_SAMPLES, "test.sco");
 	}
 	
 	public static String getDataResource(String resourceName) {

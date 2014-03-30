@@ -33,7 +33,7 @@ public class MatchTest {
 		Team homeTeam = new Team("Freiburg");
 		Team awayTeam = new Team("Wolfsburg");
 		
-		match = new Match(homeTeam, awayTeam, Ground.HOME_GROUND);
+		match = new Match(homeTeam, awayTeam, Ground.HOME_GROUND, Environment.Competitions.FRIENDLY);
 		
 		match.calculateResult(Environment.getCompetition(Environment.Competitions.FRIENDLY));
 		
