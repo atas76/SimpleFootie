@@ -13,7 +13,7 @@ import com.simplefootie.screens.Main;
  */
 public enum Screens {
 	
-	MAIN, SELECT_TEAM;
+	MAIN, SELECT_TEAM, SELECT_COMPETITION;
 	
 	/**
 	 * Mapping method between the user's menu selection and the next screen to navigate to
@@ -29,6 +29,8 @@ public enum Screens {
 			switch((Main.Options) menuOption) {
 				case PLAY_FRIENDLY:
 					return SELECT_TEAM;	
+				case PLAY_COMPETITION:
+					return SELECT_COMPETITION;
 				case EXIT:
 					return null;
 			}

@@ -33,17 +33,12 @@ public class LeaguesTest {
 	@Test
 	public void testGetLeagueTeams() {
 		
-		List<String> germanTeams = Leagues.getTeams("Bundesliga");
-		List<String> englishTeams = Leagues.getTeams("Premier League");
-		List<String> spanishTeams = Leagues.getTeams("La Liga");
+		List<Team> germanTeams = Leagues.getTeams("Bundesliga");
+		List<Team> englishTeams = Leagues.getTeams("Premier League");
+		List<Team> spanishTeams = Leagues.getTeams("La Liga");
 		
 		assertEquals(18, germanTeams.size());
 		assertEquals(12, englishTeams.size());
-		assertEquals(12, spanishTeams.size());
-		
-		assertTrue(germanTeams.contains("Mainz 05"));
-		assertTrue(englishTeams.contains("Newcastle United"));
-		assertTrue(spanishTeams.contains("Sevilla"));
-		
+		assertEquals(12, spanishTeams.size());	
 	}
 }

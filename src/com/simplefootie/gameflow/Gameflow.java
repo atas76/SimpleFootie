@@ -1,8 +1,11 @@
 package com.simplefootie.gameflow;
 
+import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 import com.simplefootie.data.DataException;
+import com.simplefootie.domain.Competition;
 import com.simplefootie.domain.Environment;
 import com.simplefootie.domain.Environment.Competitions;
 import com.simplefootie.domain.Ground;
@@ -10,6 +13,7 @@ import com.simplefootie.domain.Match;
 import com.simplefootie.domain.exceptions.InvalidTeamRankingException;
 import com.simplefootie.domain.exceptions.TeamNotFoundException;
 import com.simplefootie.gui.Screens;
+import com.simplefootie.screens.CompetitionSelection;
 import com.simplefootie.screens.InitMatchScreen;
 import com.simplefootie.screens.Main;
 import com.simplefootie.screens.NationSelection;
@@ -156,15 +160,9 @@ public class Gameflow {
 		
 		switch(screen) {
 		case MAIN:
-			
-			Main.display();
-			Main.Options userOption = Main.getUserInput();
-			
-			display(Screens.getScreenFromMenuSelection(userOption, Main.class));
-			
+			processMainMenu();
 			break;
 		case SELECT_TEAM:
-			
 			try {
 				InitMatchScreen.display(initMatch(Environment.Competitions.FRIENDLY), REPETITIONS);
 			} catch(InvalidTeamRankingException itrex) {
@@ -172,12 +170,40 @@ public class Gameflow {
 			} catch(DataException datex) {
 				System.out.println("Statistical data required not found");
 			}
+			break;
+		case SELECT_COMPETITION:
+			Map<Integer, Competition> competitionSelection = CompetitionSelection.display();
+			int selectedCompetitionIndex = getUserInput("Select competition: ");
+			Competition selectedCompetition = competitionSelection.get(selectedCompetitionIndex);
 			
-			// System.out.println("You selected team: " + teamName);
-			
+			try {
+				selectedCompetition.play();
+			} catch (DataException datex) {
+				System.out.println("Statistical data required not found");
+			} catch (InvalidTeamRankingException itrex) {
+				System.out.println("Problem retrieving ranking of selected team. Probably team not found");
+			}
+			processMainMenu();
 		default:
 			return;
 		}
+	}
+
+	private static void processMainMenu() {
+		Main.display();
+		Main.Options userOption = Main.getUserInput();
+		
+		display(Screens.getScreenFromMenuSelection(userOption, Main.class));
+	}
+	
+	public static int getUserInput(String prompt) {
+		System.out.println();
+		System.out.print(prompt);
+		
+		Scanner in = new Scanner(System.in);
+		int userOption = in.nextInt();
+		
+		return userOption;
 	}
 
 	/**

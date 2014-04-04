@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import com.simplefootie.domain.Leagues;
+import com.simplefootie.domain.Team;
 
 
 /**
@@ -29,14 +30,14 @@ public class TeamSelection {
 		
 		System.out.println();
 		
-		List<String> teamNames = Leagues.getTeams(leagueName);
+		List<Team> teams = Leagues.getTeams(leagueName);
 		
 		int count = 1;
-		for (String teamName:teamNames) {
+		for (Team team:teams) {
 			
-			optionMap.put(count, teamName);
+			optionMap.put(count, team.getName());
 			
-			System.out.println(count++ + ". " + teamName);
+			System.out.println(count++ + ". " + team.getName());
 		}
 	}
 	

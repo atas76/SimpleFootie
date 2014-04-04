@@ -97,9 +97,9 @@ public class Leagues {
 	 * @param leagueName the specified league
 	 * @return The list of available teams in the specified league
 	 */
-	public static List<String> getTeams(String leagueName) {
+	public static List<Team> getTeams(String leagueName) {
 		
-		List<String> retVal = new ArrayList<String>();
+		List<Team> retVal = new ArrayList<Team>();
 		
 		Document document = Environment.getDataDocument();
 		
@@ -130,8 +130,11 @@ public class Leagues {
 						if (currentReputation.length() > 0) {
 						
 							String currentTeamName = teamNode.getAttributes().getNamedItem("name").getNodeValue();
-						
-							retVal.add(currentTeamName);
+							String shortName = teamNode.getAttributes().getNamedItem("shortName").getNodeValue();
+							
+							logger.config("Loading team: " + currentTeamName + " with short name: " + shortName);
+					
+							retVal.add(new Team(currentTeamName, shortName, new Integer(currentReputation).intValue()));
 						}
 					}
 				}
@@ -139,7 +142,6 @@ public class Leagues {
 			}
 			
 		}
-		
 		return retVal;
 	}
 }

@@ -18,6 +18,7 @@ public class Main  {
 	public static enum Options implements MenuOptions {
 		
 		PLAY_FRIENDLY("Play friendly"),
+		PLAY_COMPETITION("Play competition"),
 		EXIT("Exit");
 		
 		private String text;

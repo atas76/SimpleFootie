@@ -1,10 +1,14 @@
 package com.simplefootie.domain;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
+import com.simplefootie.data.DataException;
 import com.simplefootie.data.ScoreSample;
+import com.simplefootie.domain.exceptions.InvalidTeamRankingException;
 import com.simplefootie.domain.exceptions.TeamNotFoundException;
 import com.simplefootie.domain.tournament.CompetitionStage;
 
@@ -23,12 +27,18 @@ import com.simplefootie.domain.tournament.CompetitionStage;
  */
 public class Competition {
 	
+	private String name;
+	
+	private List<Team> parentRanking;
+	
 	private RankingMode rankingMode;
 	private Map<RankingMode, List<Team>> rankings = new HashMap<RankingMode, List<Team>>();
 	
 	private List<Team> teams;
-	private List<CompetitionStage> stage;
+	private List<CompetitionStage> stages;
 	private ScoreSample scoreSample;
+	
+	private List<Team> remainingTeams = new ArrayList<Team>();
 	
 	/**
 	 * Each competition must have a ranking mode, so that participating teams are ranked and sorted
@@ -47,6 +57,74 @@ public class Competition {
 		return this.scoreSample;
 	}
 	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	private void showPreview() {
+		System.out.println();
+		System.out.println(this.name);
+		System.out.println();
+		System.out.println("Participating teams: (" + teams.size() + ")");
+		System.out.println();
+		for (Team team:teams) {
+			System.out.println(team.getName());
+		}
+		System.out.println();
+	}
+	
+	private void promptNext() {
+		System.out.print("Press enter to continue");
+		Scanner in = new Scanner(System.in);
+		in.nextLine();
+	}
+	
+	/**
+	 * Start the competition gameflow
+	 */
+	public void play() throws InvalidTeamRankingException, DataException {
+		
+		showPreview();
+		promptNext();
+		
+		// Initialize
+		int currentStageIndex = 0;
+		
+		while (currentStageIndex < this.stages.size()) {
+			
+			CompetitionStage currentStage = this.stages.get(currentStageIndex);
+			
+			// This is useful for competitions, where teams enter the competition in advanced stages (as e.g. in the English FA Cup)
+			currentStage.setQualifiedTeams(this.remainingTeams.subList(this.remainingTeams.size() - currentStage.getParticipantsNumber(), this.remainingTeams.size()));
+			currentStage.addQualifyingTeams(this.remainingTeams.subList(0, this.remainingTeams.size() - currentStage.getParticipantsNumber())); // Teams receiving bye
+			
+			currentStage.draw();
+			currentStage.createFixtures();
+			
+			while (!currentStage.isOver()) {
+				
+				System.out.println();
+				currentStage.showFixtures();
+				promptNext();
+				
+				currentStage.playFixtures(this); // Orientate the stage object in functional programming style
+				
+				System.out.println();
+				currentStage.showResults();
+				promptNext();
+			}
+			
+			// Finalize current stage
+			currentStage.calculateQualifyingTeams();
+			
+			this.remainingTeams = new ArrayList<Team>(); // Reset
+			for (Team team:currentStage.getQualifyingTeams()) {
+				this.remainingTeams.add(team);
+			}
+			currentStageIndex++;
+		}
+	}
+	
 	/**
 	 * 
 	 * Setting the teams is not enough. We must created their ranking on the fly. 
@@ -56,6 +134,9 @@ public class Competition {
 	public void setTeams(List<Team> teams) {
 		// For the time being we support only UEFA ranking by default
 		this.teams = teams;
+		for (Team team:teams) {
+			this.remainingTeams.add(team);
+		}
 		rankings.put(RankingMode.UEFA, teams);
 	}
 	
@@ -122,5 +203,9 @@ public class Competition {
 		}
 		// No team found
 		throw new TeamNotFoundException(shortName);
+	}
+	
+	public void setStages(List<CompetitionStage> stages) {
+		this.stages = stages;
 	}
 }

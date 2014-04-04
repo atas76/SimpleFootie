@@ -28,6 +28,16 @@ public class Match {
 	private int homeTeamScore = 0;
 	private int awayTeamScore = 0;
 	
+	private int homeTeamScoreAET;
+	private int awayTeamScoreAET;
+	
+	private int homeTeamPenaltyShoutOutScore = 0;
+	private int awayTeamPenaltyShootOutScore = 0;
+	
+	private Competition competition;
+	
+	private static Random rnd = new Random();
+	
 	/**
 	 * Initialize match, passing the team objects directly.
 	 * 
@@ -63,6 +73,19 @@ public class Match {
 	 * the other constructor should be used, however this is not the case for the web application of this project.
 	 */
 	public Match() {
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		
+		Match matchObject = (Match) object;
+		
+		return this.homeTeam.getName().equals(matchObject.getHomeTeamName()) && this.awayTeam.getName().equals(matchObject.getAwayTeamName());
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.homeTeam.getName().hashCode() * 2 + this.awayTeam.getName().hashCode();
 	}
 
 	public void setHomeTeam(String homeTeamName) {
@@ -105,6 +128,27 @@ public class Match {
 		return this.awayTeamScore;
 	}
 	
+	public int getHomeTeamScoreAET() {
+		return this.homeTeamScoreAET;
+	}
+	
+	public int getAwayTeamScoreAET() {
+		return this.awayTeamScoreAET;
+	}
+	
+	public int getHomeTeamPenaltyShootOutScore() {
+		return this.homeTeamPenaltyShoutOutScore;
+	}
+	
+	public int getAwayTeamPenaltyShootOutScore() {
+		return this.awayTeamPenaltyShootOutScore;
+	}
+	
+	@Override
+	public String toString() {
+		return this.homeTeam.getName() + " - " + this.awayTeam.getName();
+	}
+	
 	/**
 	 * Displays the result of the match: <home team name> - <away team name> <home score> - <away score>
 	 */
@@ -121,6 +165,95 @@ public class Match {
 		return (this.homeTeam != null && this.awayTeam != null);
 	}
 	
+	public Team getHomeTeam() {
+		return this.homeTeam;
+	}
+	
+	public Team getAwayTeam() {
+		return this.awayTeam;
+	}
+	
+	private void shootPenalty(Team team) {
+		
+		double successFactor = 0.8; // A lot more work has been put into determining this than it seems :-)
+		
+		double outcome = rnd.nextDouble();
+		
+		if (outcome <= successFactor) {
+			if (team.equals(this.homeTeam)) {
+				this.homeTeamPenaltyShoutOutScore++;
+			}
+			if (team.equals(this.awayTeam)) {
+				this.awayTeamPenaltyShootOutScore++;
+			}
+		}
+	}
+	
+	private boolean isPenaltyShootOutWinner(int currentTeamOrder, int penaltyOrder) {
+		
+		int difference = this.homeTeamPenaltyShoutOutScore - this.awayTeamPenaltyShootOutScore;
+		
+		int homeTeamPenaltiesLeft = 5 - penaltyOrder;
+		int awayTeamPenaltiesLeft = (currentTeamOrder == 2)?(5 - penaltyOrder):(5 - penaltyOrder + 1);
+		
+		if (difference > 0 && difference > awayTeamPenaltiesLeft) {
+			return true;
+		}
+		if (difference < 0 && Math.abs(difference) > homeTeamPenaltiesLeft) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * Calculate the outcome of the penalty shootout of a match. Use the 'universal competition' statistics for the time being.
+	 */
+	public void penaltyShootOut() {
+		
+		// Although it is not currently needed, we will carry on a full simulation of the penalty shoot-out
+		// Let's make the home team shoot first for simplicity
+		
+		for (int i = 0; i < 5; i++) {
+			shootPenalty(this.homeTeam);
+			if (isPenaltyShootOutWinner(1, i + 1)) {
+				return;
+			}
+			shootPenalty(this.awayTeam);
+			if (isPenaltyShootOutWinner(2, i + 1)) {
+				return;
+			}
+		}
+		
+		// 5 penalties shoot-out completed. Check if we have a winner and if not, go to tie breaker
+		while (this.homeTeamPenaltyShoutOutScore == this.awayTeamPenaltyShootOutScore) {
+			shootPenalty(this.homeTeam);
+			shootPenalty(this.awayTeam);
+		}
+	}
+	
+	public void playExtraTime() {
+		
+		// Create a copy of the match and calculate the result
+		Match extraTimeMatch = new Match(this.homeTeam, this.awayTeam, Ground.HOME_GROUND, "Extra time");
+		
+		try {
+			
+			extraTimeMatch.calculateResult(this.competition);
+			
+			// Extra time duration is 1/3 of the normal time match
+			int homeTeamExtraTimeScore = extraTimeMatch.homeTeamScore / 3;
+			int awayTeamExtraTimeScore = extraTimeMatch.awayTeamScore / 3;
+			
+			this.homeTeamScoreAET = this.homeTeamScore + homeTeamExtraTimeScore;
+			this.awayTeamScoreAET = this.awayTeamScore + awayTeamExtraTimeScore;
+			
+		} catch (Exception ex) {
+			// No need to catch any exceptions, as these would be thrown anyway when calculating the normal time of the match
+			logger.warning("Exception thrown when calculating extra time"); // Just in case
+		}
+	}
+	
 	/**
 	 * Calculates a single match result and saves the score internally. This means that a match result can be calculated many times, but only the last score is saved.
 	 * 
@@ -133,6 +266,10 @@ public class Match {
 		
 		int homeTeamRanking = competition.getTeamRanking(this.homeTeam.getName());
 		int awayTeamRanking = competition.getTeamRanking(this.awayTeam.getName());
+		
+		if (this.competition == null) {
+			this.competition = competition; // We need the competition details for further processing, e.g. extra time
+		}
 		
 		// logger.setLevel(Level.CONFIG);
 		
