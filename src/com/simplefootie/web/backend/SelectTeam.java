@@ -1,8 +1,10 @@
 package com.simplefootie.web.backend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.simplefootie.domain.Leagues;
+import com.simplefootie.domain.Team;
 
 
 public class SelectTeam {
@@ -14,6 +16,13 @@ public class SelectTeam {
 	 * @return the set of available teams for a specific league
 	 */
 	public static List<String> getDynamicDisplay(String league) {
-		return Leagues.getTeams(league);
+		
+		List<String> teamNames = new ArrayList<String>();
+		
+		for (Team team: Leagues.getTeams(league)) {
+			teamNames.add(team.getName());
+		}
+		
+		return teamNames;
 	}
 }
