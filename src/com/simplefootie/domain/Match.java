@@ -271,8 +271,9 @@ public class Match {
 			this.extraTimePlayed = true;
 			
 		} catch (Exception ex) {
-			// No need to catch any exceptions, as these would be thrown anyway when calculating the normal time of the match
-			logger.warning("Exception thrown when calculating extra time"); // Just in case
+			// And yet an exception is thrown. Print stack trace for debugging purposes
+			logger.warning("Exception thrown when calculating extra time");
+            ex.printStackTrace();
 		}
 	}
 	
