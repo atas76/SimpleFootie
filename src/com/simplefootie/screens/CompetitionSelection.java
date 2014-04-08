@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.simplefootie.domain.Competition;
 import com.simplefootie.domain.Environment;
+import com.simplefootie.domain.Environment.Competitions;
 
 public class CompetitionSelection {
 	
@@ -16,6 +17,9 @@ public class CompetitionSelection {
 		
 		int count = 1;
 		for (Map.Entry<String, Competition> competitionEntry: registeredCompetitions.entrySet()) {
+			if (competitionEntry.getKey().equals(Competitions.FRIENDLY)) {
+				continue; // Friendly match option ('competition') has its own menu option
+			}
 			System.out.println(count + ". " + competitionEntry.getKey());
 			competitionSelection.put(count++, competitionEntry.getValue());
 		}

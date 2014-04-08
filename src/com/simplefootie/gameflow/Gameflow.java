@@ -172,6 +172,7 @@ public class Gameflow {
 			}
 			break;
 		case SELECT_COMPETITION:
+			System.out.println();
 			Map<Integer, Competition> competitionSelection = CompetitionSelection.display();
 			int selectedCompetitionIndex = getUserInput("Select competition: ");
 			Competition selectedCompetition = competitionSelection.get(selectedCompetitionIndex);

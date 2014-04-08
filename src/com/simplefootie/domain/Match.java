@@ -31,8 +31,11 @@ public class Match {
 	private int homeTeamScoreAET;
 	private int awayTeamScoreAET;
 	
-	private int homeTeamPenaltyShoutOutScore = 0;
+	private int homeTeamPenaltyShootOutScore = 0;
 	private int awayTeamPenaltyShootOutScore = 0;
+	
+	private boolean extraTimePlayed;
+	private boolean penaltyShootOutPlayed;
 	
 	private Competition competition;
 	
@@ -137,7 +140,7 @@ public class Match {
 	}
 	
 	public int getHomeTeamPenaltyShootOutScore() {
-		return this.homeTeamPenaltyShoutOutScore;
+		return this.homeTeamPenaltyShootOutScore;
 	}
 	
 	public int getAwayTeamPenaltyShootOutScore() {
@@ -153,7 +156,21 @@ public class Match {
 	 * Displays the result of the match: <home team name> - <away team name> <home score> - <away score>
 	 */
 	public void displayResult() {
-		System.out.println(this.homeTeam.getName() + " - " + this.awayTeam.getName() + "   " + homeTeamScore + "-" + awayTeamScore);
+		
+		String opponents = this.homeTeam.getName() + " - " + this.awayTeam.getName();
+		String result =  homeTeamScore + "-" + awayTeamScore;
+		
+		if (this.extraTimePlayed) {
+			String normalTimeResult = result;
+			result = homeTeamScoreAET + " - " + awayTeamScoreAET + " (aet)" + ", Normal time: " + normalTimeResult;
+		}
+		
+		if (this.penaltyShootOutPlayed) {
+			String playingTimeResult = result;
+			result = homeTeamPenaltyShootOutScore + " - " + awayTeamPenaltyShootOutScore + " (pens)" + ", " + playingTimeResult; 
+		}
+		
+		System.out.println(opponents +  "   " + result);
 	}
 	
 	/**
@@ -181,7 +198,7 @@ public class Match {
 		
 		if (outcome <= successFactor) {
 			if (team.equals(this.homeTeam)) {
-				this.homeTeamPenaltyShoutOutScore++;
+				this.homeTeamPenaltyShootOutScore++;
 			}
 			if (team.equals(this.awayTeam)) {
 				this.awayTeamPenaltyShootOutScore++;
@@ -191,7 +208,7 @@ public class Match {
 	
 	private boolean isPenaltyShootOutWinner(int currentTeamOrder, int penaltyOrder) {
 		
-		int difference = this.homeTeamPenaltyShoutOutScore - this.awayTeamPenaltyShootOutScore;
+		int difference = this.homeTeamPenaltyShootOutScore - this.awayTeamPenaltyShootOutScore;
 		
 		int homeTeamPenaltiesLeft = 5 - penaltyOrder;
 		int awayTeamPenaltiesLeft = (currentTeamOrder == 2)?(5 - penaltyOrder):(5 - penaltyOrder + 1);
@@ -217,25 +234,28 @@ public class Match {
 		for (int i = 0; i < 5; i++) {
 			shootPenalty(this.homeTeam);
 			if (isPenaltyShootOutWinner(1, i + 1)) {
+				this.penaltyShootOutPlayed = true;
 				return;
 			}
 			shootPenalty(this.awayTeam);
 			if (isPenaltyShootOutWinner(2, i + 1)) {
+				this.penaltyShootOutPlayed = true;
 				return;
 			}
 		}
 		
 		// 5 penalties shoot-out completed. Check if we have a winner and if not, go to tie breaker
-		while (this.homeTeamPenaltyShoutOutScore == this.awayTeamPenaltyShootOutScore) {
+		while (this.homeTeamPenaltyShootOutScore == this.awayTeamPenaltyShootOutScore) {
 			shootPenalty(this.homeTeam);
 			shootPenalty(this.awayTeam);
 		}
+		this.penaltyShootOutPlayed = true;
 	}
 	
 	public void playExtraTime() {
 		
 		// Create a copy of the match and calculate the result
-		Match extraTimeMatch = new Match(this.homeTeam, this.awayTeam, Ground.HOME_GROUND, "Extra time");
+		Match extraTimeMatch = new Match(this.homeTeam, this.awayTeam, this.venue, "Extra time");
 		
 		try {
 			
@@ -247,6 +267,8 @@ public class Match {
 			
 			this.homeTeamScoreAET = this.homeTeamScore + homeTeamExtraTimeScore;
 			this.awayTeamScoreAET = this.awayTeamScore + awayTeamExtraTimeScore;
+			
+			this.extraTimePlayed = true;
 			
 		} catch (Exception ex) {
 			// No need to catch any exceptions, as these would be thrown anyway when calculating the normal time of the match

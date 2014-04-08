@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import com.simplefootie.Resources;
 import com.simplefootie.data.DataException;
 import com.simplefootie.data.ScoreSample;
+import com.simplefootie.domain.Environment.Competitions;
 import com.simplefootie.domain.exceptions.InvalidTeamRankingException;
 import com.simplefootie.domain.exceptions.TeamNotFoundException;
 import com.simplefootie.domain.tournament.CompetitionStage;
+import com.simplefootie.domain.tournament.Grouping;
 
 /**
  * Grouping of teams belonging to a particular competition. 
@@ -34,7 +37,7 @@ public class Competition {
 	private RankingMode rankingMode;
 	private Map<RankingMode, List<Team>> rankings = new HashMap<RankingMode, List<Team>>();
 	
-	private List<Team> teams;
+	private List<Team> teams = new ArrayList<Team>();
 	private List<CompetitionStage> stages;
 	private ScoreSample scoreSample;
 	
@@ -79,10 +82,22 @@ public class Competition {
 		in.nextLine();
 	}
 	
+	private void initialize() {
+		this.remainingTeams = new ArrayList<Team>();
+		for (Team team:teams) {
+			this.remainingTeams.add(team);
+		}
+		for (CompetitionStage stage:this.stages) {
+			stage.reset();
+		}
+	}
+	
 	/**
 	 * Start the competition gameflow
 	 */
 	public void play() throws InvalidTeamRankingException, DataException {
+		
+		initialize();
 		
 		showPreview();
 		promptNext();
@@ -101,6 +116,9 @@ public class Competition {
 			currentStage.draw();
 			currentStage.createFixtures();
 			
+			System.out.println();
+			System.out.println(currentStage.getName());
+			
 			while (!currentStage.isOver()) {
 				
 				System.out.println();
@@ -111,6 +129,11 @@ public class Competition {
 				
 				System.out.println();
 				currentStage.showResults();
+				System.out.println();
+				promptNext();
+			}
+			
+			if (currentStage.showAggregateResults()) {
 				promptNext();
 			}
 			
@@ -132,11 +155,7 @@ public class Competition {
 	 * @param teams The teams will remain 'sorted' for backwards compatibility.
 	 */
 	public void setTeams(List<Team> teams) {
-		// For the time being we support only UEFA ranking by default
 		this.teams = teams;
-		for (Team team:teams) {
-			this.remainingTeams.add(team);
-		}
 		rankings.put(RankingMode.UEFA, teams);
 	}
 	

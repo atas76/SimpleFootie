@@ -29,7 +29,10 @@ public class CompetitionStage {
 	
 	public void reset() {
 		this.qualifyingTeams = new ArrayList<Team>();
+		this.qualifiedTeams = new ArrayList<Team>();
+		this.matchDays = new ArrayList<FixtureGroup>();
 		this.draw = null;
+		this.currentMatchDay = 0;
 	}
 	
 	public CompetitionStage(StageType stageType, PairingType pairingType, List<TieBreaker> tieBreakers, int participantsNumber, String name) {
@@ -48,12 +51,20 @@ public class CompetitionStage {
 		return this.qualifyingTeams;
 	}
 	
+	public List<Grouping> getGroupings() {
+		return this.draw.getGroupings();
+	}
+	
 	public int getParticipantsNumber() {
 		return this.participantsNumber;
 	}
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 	
 	public boolean isOver() {
@@ -99,7 +110,7 @@ public class CompetitionStage {
 				this.matchDays.add(new FixtureGroup("First Leg", false));
 				this.matchDays.add(new FixtureGroup("Second Leg", true));
 			} else {
-				this.matchDays.add(new FixtureGroup("Final", true));
+				this.matchDays.add(new FixtureGroup(null, true)); // The match day title will be inherited from the stage title
 			}
 			for (Grouping grouping: draw.getGroupings()) {	
 				List<List<Match>> matches = grouping.createSchedule(this.stageType, this.pairingType);
@@ -112,6 +123,30 @@ public class CompetitionStage {
 		}
 	}
 	
+	public boolean showAggregateResults() {
+		// Display aggregate scores
+		
+		if (!this.stageType.equals(StageType.KNOCKOUT)) {
+			return false;
+		}
+		
+		if (!this.pairingType.equals(PairingType.DOUBLE_MATCH)) {
+			return false;
+		}
+		
+		System.out.println();
+		System.out.println("Aggregate scores for " + this.name);
+		System.out.println();
+		
+		for (Grouping grouping:this.getGroupings()) {
+			System.out.println(grouping.getAggregateScore());
+			System.out.println("Winners: " + grouping.getWinners().get(0).getName() + 
+					(grouping.getTieBreaker() != null?" on " + grouping.getTieBreaker().getDescription():""));
+			System.out.println();
+		}
+		return true;
+	}
+	
 	public void showFixtures() {
 		this.matchDays.get(this.currentMatchDay).display();
 	}
@@ -121,6 +156,7 @@ public class CompetitionStage {
 		for (Match match:this.matchDays.get(this.currentMatchDay++).getMatches()) {
 			match.displayResult();
 		}
+		System.out.println();
 	}
 	
 	public void playFixtures(Competition competition) throws DataException, InvalidTeamRankingException {

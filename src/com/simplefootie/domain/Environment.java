@@ -57,10 +57,7 @@ public class Environment {
 	 */
 	public static void load(String path) throws ParserConfigurationException, IOException, SAXException {
 		
-		DocumentBuilderFactory docBuildFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = docBuildFactory.newDocumentBuilder();
-		
-		environmentDocument = docBuilder.parse(new File(path));
+		loadData(path);
 		
 		// Universal 'friendly' competition
 		Competition friendlyCompetition = createCompetition(Leagues.getAllTeams(environmentDocument), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
@@ -93,12 +90,21 @@ public class Environment {
 		
 		// Bundesliga
 		Competition germanKnockout = createCompetition(Leagues.getTeams("Bundesliga"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
-		germanKnockout.setStages(knockoutCompetitionStages);
+		germanKnockout.setStages(germanKnockoutStages);
 		germanKnockout.setName(Competitions.GERMAN_KNOCKOUT);
 		
 		// Registering of competitions
 		competitions.put(Competitions.FRIENDLY, friendlyCompetition);
 		competitions.put(Competitions.GERMAN_KNOCKOUT, germanKnockout);
+	}
+
+	public static void loadData(String path)
+			throws ParserConfigurationException, SAXException, IOException {
+		
+		DocumentBuilderFactory docBuildFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = docBuildFactory.newDocumentBuilder();
+		
+		environmentDocument = docBuilder.parse(new File(path));
 	}
 
 	/**
@@ -111,7 +117,7 @@ public class Environment {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	private static Competition createCompetition(List<Team> teams, String resourceFile, RankingMode rankingMode, List<Team> parentRanking)
+	public static Competition createCompetition(List<Team> teams, String resourceFile, RankingMode rankingMode, List<Team> parentRanking)
 			throws FileNotFoundException, IOException {
 		
 		// Use this sorting by default (as a 'universal' one), but to be changed per competition 
@@ -140,6 +146,10 @@ public class Environment {
 	 */
 	public static void load() throws ParserConfigurationException, IOException, SAXException {
 		Environment.load(Resources.getDataResource(Resources.DB));
+	}
+	
+	public static void loadData() throws IOException, ParserConfigurationException, SAXException {
+		Environment.loadData(Resources.getDataResource(Resources.DB));
 	}
 	
 	public static Document getDataDocument() {

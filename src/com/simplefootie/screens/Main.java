@@ -17,7 +17,7 @@ public class Main  {
 	
 	public static enum Options implements MenuOptions {
 		
-		PLAY_FRIENDLY("Play friendly"),
+		PLAY_FRIENDLY("Play friendly (and exit)"),
 		PLAY_COMPETITION("Play competition"),
 		EXIT("Exit");
 		
@@ -32,6 +32,9 @@ public class Main  {
 	 * Displays the options for the user to choose from
 	 */
 	public static void display() {
+		
+		System.out.println();
+		
 		int count = 1;
 		for (Options menuOption: Options.values()) {
 			System.out.println(count++ + ". " + menuOption.text);

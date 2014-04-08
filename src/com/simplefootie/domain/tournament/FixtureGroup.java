@@ -40,7 +40,9 @@ public class FixtureGroup {
 	public void display() {
 		
 		System.out.println();
-		System.out.println(this.title);
+		if (this.title != null) {
+			System.out.println(this.title);
+		}
 		System.out.println();
 		
 		for (Match match:this.matches) {
