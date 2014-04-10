@@ -328,7 +328,7 @@ public class Match {
 			
 			List<Score> reverseSampleScores = competition.getScoreSample().filterByCapacity(reverseCapacityRatio).getScores();
 			
-			Score complementScore = sampleScores.get(rnd.nextInt(reverseSampleScores.size()));
+			Score complementScore = reverseSampleScores.get(rnd.nextInt(reverseSampleScores.size()));
 			
 			this.homeTeamScore += complementScore.getAwayScore();
 			this.awayTeamScore += complementScore.getHomeScore();
