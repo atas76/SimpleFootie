@@ -44,6 +44,9 @@ public class Environment {
 		public final static String GERMAN_KNOCKOUT = "Bundesliga knockout tournament";
 		public final static String ENGLISH_KNOCKOUT = "English Premier League knockout tournament";
 		public final static String SPANISH_KNOCKOUT = "La Liga knockout tournament";
+		public final static String ITALIAN_KNOCKOUT = "Serie A knockout tournament";
+		public final static String PORTUGUESE_KNOCKOUT = "Primeira Liga knockout tournament";
+		public final static String FRENCH_KNOCKOUT = "Ligue 1 knockout tournament";
 	}
 	
 	/**
@@ -75,10 +78,13 @@ public class Environment {
 		finalTieBreakers.add(TieBreaker.EXTRA_TIME);
 		finalTieBreakers.add(TieBreaker.PENALTY_SHOOUTOUT);
 		
-		// We hardcode here the current max number of teams per nation (Bundesliga, etc.)
+		// Preliminary rounds
 		CompetitionStage germanPreliminaryRound = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 12, "Preliminary round");
 		CompetitionStage englishPreliminaryRound = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 8, "Preliminary round");
 		CompetitionStage spanishPreliminaryRound = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 8, "Preliminary round");
+		CompetitionStage italianPreliminaryRound = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 6, "Preliminary round");
+		CompetitionStage portuguesePreliminaryRound = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 6, "Preliminary round");
+		CompetitionStage frenchPreliminaryRound = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 8, "Preliminary round");
 		
 		CompetitionStage quarterFinals = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 8, "Quarter finals");
 		CompetitionStage semiFinals = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 4, "Semi finals");
@@ -88,6 +94,8 @@ public class Environment {
 		knockoutCompetitionStages.add(quarterFinals);
 		knockoutCompetitionStages.add(semiFinals);
 		knockoutCompetitionStages.add(theFinal);
+		
+		// Knockout stages per nation
 		
 		List<CompetitionStage> germanKnockoutStages = new ArrayList<CompetitionStage>();
 		germanKnockoutStages.add(germanPreliminaryRound);
@@ -100,6 +108,18 @@ public class Environment {
 		List<CompetitionStage> spanishKnockoutStages = new ArrayList<CompetitionStage>();
 		spanishKnockoutStages.add(spanishPreliminaryRound);
 		spanishKnockoutStages.addAll(knockoutCompetitionStages);
+		
+		List<CompetitionStage> italianKnockoutStages = new ArrayList<CompetitionStage>();
+		italianKnockoutStages.add(italianPreliminaryRound);
+		italianKnockoutStages.addAll(knockoutCompetitionStages);
+		
+		List<CompetitionStage> portugueseKnockoutStages = new ArrayList<CompetitionStage>();
+		portugueseKnockoutStages.add(portuguesePreliminaryRound);
+		portugueseKnockoutStages.addAll(knockoutCompetitionStages);
+		
+		List<CompetitionStage> frenchKnockoutStages = new ArrayList<CompetitionStage>();
+		frenchKnockoutStages.add(frenchPreliminaryRound);
+		frenchKnockoutStages.addAll(knockoutCompetitionStages);
 		
 		// Bundesliga
 		Competition germanKnockout = createCompetition(Leagues.getTeams("Bundesliga"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
@@ -116,11 +136,29 @@ public class Environment {
 		spanishKnockout.setStages(spanishKnockoutStages);
 		spanishKnockout.setName(Competitions.SPANISH_KNOCKOUT);
 		
+		// Italian League
+		Competition italianKnockout = createCompetition(Leagues.getTeams("Serie A"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
+		italianKnockout.setStages(italianKnockoutStages);
+		italianKnockout.setName(Competitions.ITALIAN_KNOCKOUT);
+		
+		// Portuguese League
+		Competition portugueseKnockout = createCompetition(Leagues.getTeams("Primeira Liga"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
+		portugueseKnockout.setStages(portugueseKnockoutStages);
+		portugueseKnockout.setName(Competitions.PORTUGUESE_KNOCKOUT);
+		
+		// French League
+		Competition frenchKnockout = createCompetition(Leagues.getTeams("Ligue 1"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
+		frenchKnockout.setStages(frenchKnockoutStages);
+		frenchKnockout.setName(Competitions.FRENCH_KNOCKOUT);
+		
 		// Registering of competitions
 		competitions.put(Competitions.FRIENDLY, friendlyCompetition);
 		competitions.put(Competitions.GERMAN_KNOCKOUT, germanKnockout);
 		competitions.put(Competitions.ENGLISH_KNOCKOUT, englishKnockout);
 		competitions.put(Competitions.SPANISH_KNOCKOUT, spanishKnockout);
+		competitions.put(Competitions.ITALIAN_KNOCKOUT, italianKnockout);
+		competitions.put(Competitions.PORTUGUESE_KNOCKOUT, portugueseKnockout);
+		competitions.put(Competitions.FRENCH_KNOCKOUT, frenchKnockout);
 	}
 
 	public static void loadData(String path)
