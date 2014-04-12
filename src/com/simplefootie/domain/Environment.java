@@ -48,6 +48,7 @@ public class Environment {
 		public final static String PORTUGUESE_KNOCKOUT = "Primeira Liga knockout tournament";
 		public final static String FRENCH_KNOCKOUT = "Ligue 1 knockout tournament";
         public final static String RUSSIAN_KNOCKOUT = "Russian Premier League knockout tournament";
+        public final static String DUTCH_KNOCKOUT = "Eredivisie knockout tournament";
 	}
 	
 	/**
@@ -87,6 +88,7 @@ public class Environment {
 		CompetitionStage portuguesePreliminaryRound = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 6, "Preliminary round");
 		CompetitionStage frenchPreliminaryRound = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 8, "Preliminary round");
         CompetitionStage russianPreliminaryRound = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 4, "Preliminary round");
+        CompetitionStage dutchPreliminaryRound = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 6, "Preliminary round");
 		
 		CompetitionStage quarterFinals = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 8, "Quarter finals");
 		CompetitionStage semiFinals = new CompetitionStage(StageType.KNOCKOUT, PairingType.DOUBLE_MATCH, roundTieBreakers, 4, "Semi finals");
@@ -126,6 +128,10 @@ public class Environment {
         List<CompetitionStage> russianKnockoutStages = new ArrayList<CompetitionStage>();
         russianKnockoutStages.add(russianPreliminaryRound);
         russianKnockoutStages.addAll(knockoutCompetitionStages);
+        
+        List<CompetitionStage> dutchKnockoutStages = new ArrayList<CompetitionStage>();
+        dutchKnockoutStages.add(dutchPreliminaryRound);
+        dutchKnockoutStages.addAll(knockoutCompetitionStages);
 		
 		// Bundesliga
 		Competition germanKnockout = createCompetition(Leagues.getTeams("Bundesliga"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
@@ -137,22 +143,22 @@ public class Environment {
 		englishKnockout.setStages(englishKnockoutStages);
 		englishKnockout.setName(Competitions.ENGLISH_KNOCKOUT);
 		
-		// Spanish League
+		// La Liga
 		Competition spanishKnockout = createCompetition(Leagues.getTeams("La Liga"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
 		spanishKnockout.setStages(spanishKnockoutStages);
 		spanishKnockout.setName(Competitions.SPANISH_KNOCKOUT);
 		
-		// Italian League
+		// Serie A
 		Competition italianKnockout = createCompetition(Leagues.getTeams("Serie A"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
 		italianKnockout.setStages(italianKnockoutStages);
 		italianKnockout.setName(Competitions.ITALIAN_KNOCKOUT);
 		
-		// Portuguese League
+		// Primeira Liga
 		Competition portugueseKnockout = createCompetition(Leagues.getTeams("Primeira Liga"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
 		portugueseKnockout.setStages(portugueseKnockoutStages);
 		portugueseKnockout.setName(Competitions.PORTUGUESE_KNOCKOUT);
 		
-		// French League
+		// Ligue 1
 		Competition frenchKnockout = createCompetition(Leagues.getTeams("Ligue 1"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
 		frenchKnockout.setStages(frenchKnockoutStages);
 		frenchKnockout.setName(Competitions.FRENCH_KNOCKOUT);
@@ -161,6 +167,11 @@ public class Environment {
         Competition russianKnockout = createCompetition(Leagues.getTeams("Premier League (Russia)"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
         russianKnockout.setStages(russianKnockoutStages);
         russianKnockout.setName(Competitions.RUSSIAN_KNOCKOUT);
+        
+        // Eredivisie
+        Competition dutchKnockout = createCompetition(Leagues.getTeams("Eredivisie"), Resources.UNIVERSAL_SCORE_SAMPLES, RankingMode.UEFA, null);
+        dutchKnockout.setStages(dutchKnockoutStages);
+        dutchKnockout.setName(Competitions.DUTCH_KNOCKOUT);
 		
 		// Registering of competitions
 		competitions.put(Competitions.FRIENDLY, friendlyCompetition);
@@ -171,6 +182,7 @@ public class Environment {
 		competitions.put(Competitions.PORTUGUESE_KNOCKOUT, portugueseKnockout);
 		competitions.put(Competitions.FRENCH_KNOCKOUT, frenchKnockout);
         competitions.put(Competitions.RUSSIAN_KNOCKOUT, russianKnockout);
+        competitions.put(Competitions.DUTCH_KNOCKOUT, dutchKnockout);
 	}
 
 	public static void loadData(String path)
