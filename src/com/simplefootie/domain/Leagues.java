@@ -18,6 +18,25 @@ public class Leagues {
 	
 	private static Logger logger = Logger.getLogger("domain.Leagues");
 	
+	public static List<League> getLeagues() {
+		
+		List<League> leagues = new ArrayList<League>();
+		
+		Document document = Environment.getDataDocument();
+		
+		NodeList leagueElements = document.getElementsByTagName("League");
+		
+		for (int i = 0; i < leagueElements.getLength(); i++) {
+			
+			Node leagueNode = leagueElements.item(i);
+			
+			leagues.add(new League(new Integer(leagueNode.getAttributes().getNamedItem("id").getNodeValue()), 
+					leagueNode.getAttributes().getNamedItem("name").getNodeValue()));
+		}
+		
+		return leagues;
+	}
+	
 	/**
 	 * Getter of all teams' names irrespective of the league they belong to.
 	 * 
@@ -91,6 +110,21 @@ public class Leagues {
 		
 	}
 	
+	public static List<Team> getTeamsByLeagueId(Integer leagueId) {
+		
+		List<League> leagues = Leagues.getLeagues();
+		String leagueName = "";
+		
+		for (League league:leagues) {
+			if (league.getLeagueId().equals(leagueId)) {
+				leagueName = league.getName();
+				break;
+			}
+		}
+		
+		return Leagues.getTeams(leagueName);
+	}
+	
 	/**
 	 * Get teams of a specified league from the data source.
 	 * 
@@ -131,10 +165,11 @@ public class Leagues {
 						
 							String currentTeamName = teamNode.getAttributes().getNamedItem("name").getNodeValue();
 							String shortName = teamNode.getAttributes().getNamedItem("shortName").getNodeValue();
+							String teamId = teamNode.getAttributes().getNamedItem("id").getNodeValue();
 							
 							logger.config("Loading team: " + currentTeamName + " with short name: " + shortName);
 					
-							retVal.add(new Team(currentTeamName, shortName, new Integer(currentReputation).intValue()));
+							retVal.add(new Team(new Integer(teamId), currentTeamName, shortName, new Integer(currentReputation).intValue()));
 						}
 					}
 				}

@@ -27,6 +27,7 @@ public class SelectLeague extends HttpServlet {
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
+		/*
 		if (request.getSession() == null || request.getSession().getAttribute("username") == null) {
 			logger.info("No user in session");
 			response.sendRedirect(Navigation.ROOT_REDIRECT);
@@ -40,52 +41,39 @@ public class SelectLeague extends HttpServlet {
 			response.sendRedirect(Navigation.MATCH_PREVIEW_REDIRECT);
 			return;
 		}
+		*/
 		
-		PrintWriter out = response.getWriter();
+		// PrintWriter out = response.getWriter();
 		
+		/*
 		String optionSrc = request.getParameter("optionSrc");
 		String leagueSelected = request.getParameter("leagueSelection");
 		
 		logger.info("Option source: " + optionSrc);
 		logger.info("League selected: " + leagueSelected);
+		*/
 		
-		if (leagueSelected == null) { // Do it all over again, because the user is messing around (helped by the clunky at the moment user interface)
-			
-			List<String> availableLeagues = com.simplefootie.web.backend.SelectLeague.getDynamicDisplay();
-			
-			if (availableLeagues == null) { // Something went wrong with data retrieval
-				request.setAttribute("errorMessage", ErrorMessages.errorRetrievingData);
-				request.getRequestDispatcher(Navigation.ERROR_PAGE_DISPATCH).forward(request, response);
-				return;
-			}
-			
-			Map<String, String> options = new HashMap<String,String>();
-			
-			for (String league:availableLeagues) {
-				options.put(league, league);
-			}
-			
-			WebSelectionScreen selectionScreen = new WebSelectionScreen(options, "selectLeague", "leagueSelection", optionSrc);
-			
-			out.write(selectionScreen.generateHTML());
+		String leagueSelected = request.getParameter("league");
+		
+		logger.info("League Selection Controller");
+		logger.info("League selected => " + leagueSelected);
+		
+		if (leagueSelected == null) { 
+			response.sendRedirect(request.getContextPath() + Navigation.SELECT_LEAGUE_PAGE);
 			return;
 		}
+		
+		try {
+		
+			Integer leagueId = new Integer(leagueSelected);
 			
-		List<String> teams  = SelectTeam.getDynamicDisplay(leagueSelected);
+			request.setAttribute("leagueId", leagueId);
 			
-		Map<String, String> options = new HashMap<String, String>();
+			request.getRequestDispatcher(Navigation.SELECT_TEAM_PAGE).forward(request, response);
 			
-		for (String team:teams) {
-			
-			if (optionSrc.equals("awayFriendly") && team.equals(currentMatch.getHomeTeamName())) { // Don't display an already selected team!
-				continue;
-			}
-			
-			options.put(team, team);
+		} catch (NumberFormatException nfex) {
+			response.sendRedirect(request.getContextPath() + Navigation.SELECT_LEAGUE_PAGE);
+			return;
 		}
-			
-		WebSelectionScreen selectionScreen = new WebSelectionScreen(options, "selectTeam", "teamSelection", optionSrc);
-			
-		out.write(selectionScreen.generateHTML());
 	}
 }

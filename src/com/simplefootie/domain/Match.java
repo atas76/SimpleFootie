@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 
 import com.simplefootie.data.DataException;
+import com.simplefootie.domain.exceptions.InvalidMatchMutationException;
 import com.simplefootie.domain.exceptions.InvalidTeamRankingException;
 
 
@@ -90,6 +91,16 @@ public class Match {
 	public int hashCode() {
 		return this.homeTeam.getName().hashCode() * 2 + this.awayTeam.getName().hashCode();
 	}
+	
+	public void setNextTeam(Team team) throws InvalidMatchMutationException {
+		if (this.homeTeam == null) {
+			this.homeTeam = team;
+		} else if (this.awayTeam == null) {
+			this.awayTeam = team;
+		} else {
+			throw new InvalidMatchMutationException(this.homeTeam.getName(), this.awayTeam.getName(), team.getName());
+		}
+	}
 
 	public void setHomeTeam(String homeTeamName) {
 		this.homeTeam = Environment.getCompetition(label).getTeamByName(homeTeamName);
@@ -107,10 +118,12 @@ public class Match {
 		this.label = label;
 	}
 	
+	@Deprecated
 	public String getHomeTeamName() {
 		return this.homeTeam.getName();
 	}
 	
+	@Deprecated
 	public String getAwayTeamName() {
 		return this.awayTeam.getName();
 	}

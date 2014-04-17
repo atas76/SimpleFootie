@@ -24,6 +24,7 @@ public class SignUpIn extends HttpServlet {
 		
 		if (request.getSession() != null && request.getSession().getAttribute("username") != null) {
 			logger.info("You cannot sign in on top of an existing user session. Please logout first");
+			logger.info("Username: " + request.getSession().getAttribute("username"));
 			response.sendRedirect(Navigation.MAIN_REDIRECT);
 			return;
 		}

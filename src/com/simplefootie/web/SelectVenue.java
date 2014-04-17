@@ -14,7 +14,7 @@ public class SelectVenue extends HttpServlet {
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
-		String groundSelection = request.getParameter("groundSelection");
+		String groundSelection = request.getParameter("venueSelection");
 		Match match = (Match) request.getSession().getAttribute("currentMatch");
 		
 		switch(groundSelection) {
@@ -25,11 +25,15 @@ public class SelectVenue extends HttpServlet {
 			match.setVenue(Ground.NEUTRAL_GROUND);
 			break;
 		default:
+			match.setVenue(Ground.HOME_GROUND); // This is the default anyway
+			/*
 			request.setAttribute("errorMessage", ErrorMessages.invalidInputValue);
 			request.getRequestDispatcher(Navigation.ERROR_PAGE_DISPATCH).forward(request, response);
 			return;
+			*/
 		}
 		
-		request.getRequestDispatcher(Navigation.MATCH_PREVIEW_DISPATCH).forward(request, response);
+		response.sendRedirect(Navigation.MATCH_PREVIEW_VIEW);
+		// request.getRequestDispatcher(Navigation.MATCH_PREVIEW_DISPATCH).forward(request, response);
 	}
 }

@@ -50,8 +50,77 @@
 		<servlet-name>SelectVenue</servlet-name>
 		<servlet-class>com.simplefootie.web.SelectVenue</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>LoginPage</servlet-name>
+		<servlet-class>com.simplefootie.web.views.LoginPage</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>MainPage</servlet-name>
+		<servlet-class>com.simplefootie.web.views.MainPage</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>SelectLeaguePage</servlet-name>
+		<servlet-class>com.simplefootie.web.views.SelectLeaguePage</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>SelectTeamPage</servlet-name>
+		<servlet-class>com.simplefootie.web.views.SelectTeamPage</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>MatchPreviewPage</servlet-name>
+		<servlet-class>com.simplefootie.web.views.MatchPreviewPage</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>VenueSelectionPage</servlet-name>
+		<servlet-class>com.simplefootie.web.views.VenueSelectionPage</servlet-class>
+	</servlet>
 
 	<!-- Servlet mappings -->
+	
+	<!--  Views  -->
+	
+	<servlet-mapping>
+		<servlet-name>LoginPage</servlet-name>
+		<url-pattern>/index.html</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>LoginPage</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>MainPage</servlet-name>
+		<url-pattern>/main</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>SelectLeaguePage</servlet-name>
+		<url-pattern>/selectLeaguePage</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>SelectTeamPage</servlet-name>
+		<url-pattern>/selectTeamPage</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>MatchPreviewPage</servlet-name>
+		<url-pattern>/matchPreview</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>VenueSelectionPage</servlet-name>
+		<url-pattern>/venueSelection</url-pattern>
+	</servlet-mapping>
+	
+	<!-- Controllers -->
 	
 	<servlet-mapping>
 		<servlet-name>GetNextPage</servlet-name>
@@ -90,7 +159,7 @@
 	
 	<servlet-mapping>
 		<servlet-name>SelectVenue</servlet-name>
-		<url-pattern>/selectGround</url-pattern>
+		<url-pattern>/selectVenue</url-pattern>
 	</servlet-mapping>
 	
 </web-app>

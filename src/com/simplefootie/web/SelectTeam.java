@@ -1,10 +1,7 @@
 package com.simplefootie.web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -12,10 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.simplefootie.domain.Environment.Competitions;
 import com.simplefootie.domain.Match;
-import com.simplefootie.web.backend.SelectLeague;
-import com.simplefootie.web.framework.WebSelectionScreen;
+import com.simplefootie.domain.Team;
+import com.simplefootie.domain.Teams;
+import com.simplefootie.domain.exceptions.InvalidMatchMutationException;
 
 
 /**
@@ -29,107 +26,50 @@ public class SelectTeam extends HttpServlet {
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
-		if (request.getSession() == null || request.getSession().getAttribute("username") == null) {
-			logger.info("No user in session");
-			response.sendRedirect(Navigation.ROOT_REDIRECT);
+		String teamSelected = request.getParameter("team");
+		
+		if (teamSelected == null) {
+			logger.warning("No team parameter found");
+			request.getRequestDispatcher(Navigation.SELECT_TEAM_PAGE).forward(request, response);
 			return;
 		}
 		
-		Match currentMatch = (Match) request.getSession().getAttribute("currentMatch");
-		
-		if (currentMatch != null && currentMatch.hasCompleteDetails()) {
-			logger.info("Match already loaded");
-			response.sendRedirect(Navigation.MATCH_PREVIEW_REDIRECT);
-			return;
-		}
-		
-		PrintWriter out = response.getWriter();
-		
-		String optionSrc = request.getParameter("optionSrc");
-		String teamSelected = request.getParameter("teamSelection");
-		
-		Map<String, String> options = new HashMap<String,String>();
-		
-		if (teamSelected == null) { // Start all over again with league selection. Not the optimal solution, but the error case is not usual either
+		try  {
 			
-			List<String> availableLeagues = com.simplefootie.web.backend.SelectLeague.getDynamicDisplay();
+			Integer teamId = new Integer(teamSelected);
 			
-			// Map<String, String> options = new HashMap<String,String>();
+			logger.info("Team id: " + teamId);
 			
-			for (String league:availableLeagues) {
-				options.put(league, league);
-			}
+			Team team = Teams.getTeamById(teamId);
 			
-			WebSelectionScreen selectionScreen = new WebSelectionScreen(options, "selectLeague", "leagueSelection", optionSrc);
-			
-			out.write(selectionScreen.generateHTML());
-			return;
-		}
-		
-		// Give back to the domain model and start the workflow all over again
-		
-		if ("homeFriendly".equals(optionSrc)) {
-			
-			currentMatch = new Match();
-			
-			currentMatch.setLabel(Competitions.FRIENDLY);
-			
-			// We assume that a new match object should be created with a new home team selection. Otherwise we will refer to it as an existing object.
-			request.getSession().setAttribute("currentMatch", currentMatch);
-			
-			currentMatch.setHomeTeam(teamSelected);
-			
-			List<String> availableLeagues = SelectLeague.getDynamicDisplay();
-			
-			for (String league:availableLeagues) {
-				options.put(league, league);
-			}
-			
-			WebSelectionScreen selectionScreen = new WebSelectionScreen(options, "selectLeague", "leagueSelection", "awayFriendly");
-			
-			out.write(selectionScreen.generateHTML());
-			
-			// out.print(((Match) req.getSession().getAttribute("currentMatch")).getHomeTeamName());
-		}
-		
-		if ("awayFriendly".equals(optionSrc)) {
-		
-			// Match currentMatch = (Match) request.getSession().getAttribute("currentMatch");
-			
-			if (teamSelected.equals(currentMatch.getHomeTeamName())) {
-			
-				logger.info("A team cannot play against itself");
-				
-				// We reset the whole thing, as this is not a normal situation anyway. 
-				// The GUI itself will prevent the same team selected as its opponent.
-				request.getSession().invalidate();
-				response.sendRedirect(Navigation.ROOT_REDIRECT);
+			if (team == null) {
+				logger.info("No team found");
+				request.getRequestDispatcher(Navigation.SELECT_TEAM_PAGE).forward(request, response);
 				return;
-				
+			}
+			
+			logger.info("Team name: " + team.getName());
+			
+			Match currentMatch = (Match) request.getSession().getAttribute(Session.CURRENT_MATCH);
+			
+			if (currentMatch == null) {
+				currentMatch = new Match();
+				request.getSession().setAttribute(Session.CURRENT_MATCH, currentMatch);
+			}
+			
+			currentMatch.setNextTeam(team);
+			
+			if (currentMatch.hasCompleteDetails()) {
+				response.sendRedirect(request.getContextPath() + Navigation.VENUE_SELECTION_PAGE);
 			} else {
-				currentMatch.setAwayTeam(teamSelected);
+				logger.info("Match details not complete yet");
+				response.sendRedirect(request.getContextPath() + Navigation.SELECT_LEAGUE_PAGE);
 			}
 			
-			if (currentMatch == null || !currentMatch.hasCompleteDetails()) {
-				logger.severe("Postcondition of match having complete details violated. Reset and start all over again");
-				request.getSession().removeAttribute("currentMatch"); // Just in case it is in an unstable 'state'
-				response.sendRedirect(Navigation.MAIN_REDIRECT);
-				return;
-			}
-			
-			String competition = "Friendly match";
-			
-			request.setAttribute("competition", competition);
-			
-			options = new HashMap<String,String>();
-			options.put("home", "Home ground");
-			options.put("neutral", "Neutral ground");
-			
-			WebSelectionScreen selectionScreen = new WebSelectionScreen(options, "selectGround", "groundSelection", "groundSelection");
-			out.write(selectionScreen.generateHTML());
-			return;
-			
-			// request.getRequestDispatcher(Navigation.MATCH_PREVIEW_DISPATCH).forward(request, response);
+		} catch (NumberFormatException nfex) {
+			request.getRequestDispatcher(Navigation.SELECT_TEAM_PAGE).forward(request, response);
+		} catch (InvalidMatchMutationException immex) {
+			response.sendRedirect(request.getContextPath() + Navigation.MATCH_PREVIEW_PAGE);
 		}
 	}
 }

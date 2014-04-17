@@ -48,41 +48,12 @@ public class Main extends HttpServlet {
 		
 		String option = request.getParameter("main");
 		
-		logger.info("User choice: " + option);
-		
 		// System.out.println("User choice: " + option);
 		
-		String nextPageName = Pages.get("main", option);
-		
-		if (nextPageName == null) {
-			logger.info("Invalid input option: null");
-			response.sendRedirect(Navigation.MAIN_REDIRECT);
-			return;
-		}
-		
-		switch(nextPageName) {
-		case "SelectLeague":
-			if (request.getSession() == null || request.getSession().getAttribute("username") == null) {
-				logger.info("No user in session");
-				response.sendRedirect(Navigation.ROOT_REDIRECT);
-				return;
-			}
+		switch(option) {
+		case "friendly":
 			
-			if (request.getSession().getAttribute("currentMatch") != null) {
-				logger.info("Match already loaded");
-				response.sendRedirect(Navigation.MATCH_PREVIEW_REDIRECT);
-				return;
-				// req.getRequestDispatcher("/matchPreview.jsp").forward(req, resp);
-			}
-			
-			List<String> availableLeagues = SelectLeague.getDynamicDisplay();
-			
-			if (availableLeagues == null) {
-				request.setAttribute("errorMessage", ErrorMessages.errorRetrievingData);
-				request.getRequestDispatcher(Navigation.ERROR_PAGE_DISPATCH).forward(request, response);
-				return;
-			}
-			
+			/*
 			PrintWriter out = response.getWriter();
 			
 			Map<String, String> options = new HashMap<String,String>();
@@ -94,15 +65,18 @@ public class Main extends HttpServlet {
 			WebSelectionScreen selectionScreen = new WebSelectionScreen(options, "selectLeague", "leagueSelection", "homeFriendly");
 			
 			out.write(selectionScreen.generateHTML());
+			*/
+			
+			response.sendRedirect(request.getContextPath() + Navigation.SELECT_LEAGUE_PAGE);
 			
 			break;
-		case "Logout":
+		case "logout":
 			request.getSession().invalidate();
-			response.sendRedirect(Navigation.ROOT_REDIRECT);
+			response.sendRedirect(Navigation.LOGIN_VIEW);
 			break;
 		default:
 			logger.info("Invalid input option");
-			response.sendRedirect(Navigation.ROOT_REDIRECT);
+			response.sendRedirect(request.getContextPath() + Navigation.MAIN_PAGE);
 		}
 	}
 }
