@@ -17,13 +17,15 @@ public class VenueSelectionPage extends HttpServlet {
 		// Preconditions
 		
 		if (request.getSession() == null || request.getSession().getAttribute(Session.USERNAME) == null) {
-			response.sendRedirect(Navigation.LOGIN_PAGE);
+			response.sendRedirect(request.getContextPath() + Navigation.LOGIN_PAGE);
+			return;
 		}
 		
 		Match currentMatch = (Match) request.getSession().getAttribute(Session.CURRENT_MATCH);
 		
 		if (currentMatch == null || !currentMatch.hasCompleteDetails()) {
-				response.sendRedirect(Navigation.SELECT_LEAGUE_PAGE);
+			response.sendRedirect(request.getContextPath() + Navigation.SELECT_LEAGUE_PAGE);
+			return;
 		}
 		
 		//
