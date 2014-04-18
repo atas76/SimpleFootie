@@ -1,8 +1,11 @@
 package com.simplefootie.screens;
 
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import com.simplefootie.gameflow.ErrorMessages;
+import com.simplefootie.gameflow.InvalidUserInputException;
 import com.simplefootie.gui.MenuOptions;
 
 /**
@@ -46,18 +49,19 @@ public class Main  {
 	 * 
 	 * @return the current option selected from the user
 	 */
-	public static Options getUserInput() {
+	public static Options getUserInput() throws InvalidUserInputException {
 		
 		System.out.println();
 		System.out.print("Select option: ");
 		
-		Scanner in = new Scanner(System.in);
-		int userOption = in.nextInt();
-		
-		// System.out.println("The user has selected: " + i);
-		
-		// in.close();
-		
-		return Options.values()[userOption - 1];
+		try {
+			Scanner in = new Scanner(System.in);
+			int userOption = in.nextInt();
+			return Options.values()[userOption - 1];
+		} catch (ArrayIndexOutOfBoundsException aiobex) {
+			throw new InvalidUserInputException(ErrorMessages.MENU_OPTION_OUT_OF_BOUNDS);
+		} catch (InputMismatchException imex) {
+			throw new InvalidUserInputException(ErrorMessages.INVALID_MENU_OPTION);
+		}
 	}
 }

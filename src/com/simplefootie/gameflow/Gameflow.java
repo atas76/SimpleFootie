@@ -1,5 +1,6 @@
 package com.simplefootie.gameflow;
 
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -160,11 +161,21 @@ public class Gameflow {
 		
 		switch(screen) {
 		case MAIN:
-			processMainMenu();
+			try {
+				processMainMenu();
+			} catch(InvalidUserInputException iuiex) {
+				System.out.println(iuiex.getMessage());
+				display(screen);
+			}
 			break;
 		case SELECT_TEAM:
 			try {
-				InitMatchScreen.display(initMatch(Environment.Competitions.FRIENDLY), REPETITIONS);
+				try {
+					InitMatchScreen.display(initMatch(Environment.Competitions.FRIENDLY), REPETITIONS);
+				} catch(InvalidUserInputException iuiex) {
+					System.out.println(iuiex.getMessage());
+					display(screen);
+				}
 			} catch(InvalidTeamRankingException itrex) {
 				System.out.println("Problem retrieving ranking of selected team. Probably team not found");
 			} catch(DataException datex) {
@@ -174,37 +185,61 @@ public class Gameflow {
 		case SELECT_COMPETITION:
 			System.out.println();
 			Map<Integer, Competition> competitionSelection = CompetitionSelection.display();
-			int selectedCompetitionIndex = getUserInput("Select competition: ");
-			Competition selectedCompetition = competitionSelection.get(selectedCompetitionIndex);
 			
 			try {
-				selectedCompetition.play();
+				startNextCompetition(competitionSelection);
 			} catch (DataException datex) {
 				System.out.println("Statistical data required not found");
 			} catch (InvalidTeamRankingException itrex) {
 				System.out.println("Problem retrieving ranking of selected team. Probably team not found");
 			}
-			processMainMenu();
+			try {
+				processMainMenu();
+			} catch(InvalidUserInputException iuiex) {
+				System.out.println(iuiex.getMessage());
+				display(Screens.MAIN); // Main is the current screen after competition is over, so we want to revert back to it in case of error
+			}
 		default:
 			return;
 		}
 	}
 
-	private static void processMainMenu() {
+	private static void startNextCompetition(Map<Integer, Competition> competitionSelection) throws InvalidTeamRankingException,DataException {
+		try {
+			int selectedCompetitionIndex = getUserInput("Select competition: ");
+			Competition selectedCompetition = competitionSelection.get(selectedCompetitionIndex);
+			selectedCompetition.play();
+		} catch (InvalidUserInputException iuiex) {
+			System.out.println(iuiex.getMessage());
+			startNextCompetition(competitionSelection);
+		} catch (NullPointerException npe) { // no competition was found (equivalent to array index out-of-bounds)
+			System.out.println(ErrorMessages.MENU_OPTION_OUT_OF_BOUNDS);
+			startNextCompetition(competitionSelection);
+		}
+	}
+
+	private static void processMainMenu() throws InvalidUserInputException {
 		Main.display();
 		Main.Options userOption = Main.getUserInput();
 		
 		display(Screens.getScreenFromMenuSelection(userOption, Main.class));
 	}
 	
-	public static int getUserInput(String prompt) {
+	public static int getUserInput(String prompt) throws InvalidUserInputException {
+		
 		System.out.println();
 		System.out.print(prompt);
 		
 		Scanner in = new Scanner(System.in);
-		int userOption = in.nextInt();
 		
-		return userOption;
+		try {
+			int userOption = in.nextInt();
+			return userOption;
+		} catch (ArrayIndexOutOfBoundsException aiobex) {
+			throw new InvalidUserInputException(ErrorMessages.MENU_OPTION_OUT_OF_BOUNDS);
+		} catch (InputMismatchException imex) {
+			throw new InvalidUserInputException(ErrorMessages.INVALID_MENU_OPTION);
+		}
 	}
 
 	/**
@@ -213,29 +248,58 @@ public class Gameflow {
 	 * @param label A generic description of the match, e.g. "friendly match" 
 	 * @return the initialized match object
 	 */
-	public static Match initMatch(String label) {
+	public static Match initMatch(String label) throws InvalidUserInputException {
 			
 		String homeTeamName = selectTeam(null);
 		String awayTeamName = selectTeam(homeTeamName);
 		
-		VenueSelection.display();
-		Ground venue = VenueSelection.getUserInput();
+		Ground venue = selectVenue();
 		
 		return new Match(homeTeamName, awayTeamName, venue, label);
+	}
+
+	private static Ground selectVenue() {
+		try {
+			VenueSelection.display();
+			Ground venue = VenueSelection.getUserInput();
+			return venue;
+		} catch (InvalidUserInputException iuiex) {
+			System.out.println(iuiex.getMessage());
+			return selectVenue();
+		}
 	}
 	
 	private static String selectTeam(String opponent) {
 		
-		NationSelection.display();
-		String league = NationSelection.getUserInput();
-		
-		TeamSelection.display(league);
-		String teamName = TeamSelection.getUserInput();
+		String league = selectTeamNation();
+		String teamName = selectTeamFromLeague(league);
 		
 		while (opponent != null && opponent.equals(teamName)) {
 			System.out.println("A team cannot play against itself. Please select another team");
 			teamName = selectTeam(opponent);
 		}	
 		return teamName;
+	}
+
+	private static String selectTeamFromLeague(String league) {
+		try {
+			TeamSelection.display(league);
+			String teamName = TeamSelection.getUserInput();
+			return teamName;
+		} catch (InvalidUserInputException iuiex) {
+			System.out.println(iuiex.getMessage());
+			return selectTeamFromLeague(league);
+		}
+	}
+
+	private static String selectTeamNation() {
+		try {
+			NationSelection.display();
+			String league = NationSelection.getUserInput();
+			return league;
+		} catch (InvalidUserInputException iuiex) {
+			System.out.println(iuiex.getMessage());
+			return selectTeamNation();
+		}
 	}
 }

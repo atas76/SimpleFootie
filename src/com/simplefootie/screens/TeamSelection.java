@@ -1,12 +1,15 @@
 package com.simplefootie.screens;
 
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import com.simplefootie.domain.Leagues;
 import com.simplefootie.domain.Team;
+import com.simplefootie.gameflow.ErrorMessages;
+import com.simplefootie.gameflow.InvalidUserInputException;
 
 
 /**
@@ -28,6 +31,8 @@ public class TeamSelection {
 	 */
 	public static void display(String leagueName) {
 		
+		optionMap = new HashMap<Integer, String>(); // Clear previous values (for not leaving old values out of the current range)
+		
 		System.out.println();
 		
 		List<Team> teams = Leagues.getTeams(leagueName);
@@ -46,14 +51,27 @@ public class TeamSelection {
 	 * 
 	 * @return the name of team selected
 	 */
-	public static String getUserInput() {
+	public static String getUserInput() throws InvalidUserInputException {
 		
 		System.out.println();
 		System.out.print("Select team: ");
 		
-		Scanner in = new Scanner(System.in);
-		int userOption = in.nextInt();
-		
-		return optionMap.get(userOption);
+		try {
+			Scanner in = new Scanner(System.in);
+			int userOption = in.nextInt();
+			
+			String retOption = optionMap.get(userOption);
+			
+			if (retOption == null) {
+				throw new InvalidUserInputException(ErrorMessages.MENU_OPTION_OUT_OF_BOUNDS);
+			}
+			
+			return retOption;
+			
+		} catch (ArrayIndexOutOfBoundsException aiobex) {
+			throw new InvalidUserInputException(ErrorMessages.MENU_OPTION_OUT_OF_BOUNDS);
+		} catch (InputMismatchException imex) {
+			throw new InvalidUserInputException(ErrorMessages.INVALID_MENU_OPTION);
+		}
 	}
 }

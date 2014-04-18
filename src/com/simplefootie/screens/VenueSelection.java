@@ -1,8 +1,11 @@
 package com.simplefootie.screens;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.simplefootie.domain.Ground;
+import com.simplefootie.gameflow.ErrorMessages;
+import com.simplefootie.gameflow.InvalidUserInputException;
 
 
 /**
@@ -35,16 +38,21 @@ public class VenueSelection {
 	 * 
 	 * @return a value denoting either a 'home' or 'neutral' ground venue for the match
 	 */
-	public static Ground getUserInput() {
+	public static Ground getUserInput() throws InvalidUserInputException {
 		
 		System.out.println();
 		System.out.print("Select venue: ");
 		
-		Scanner in = new Scanner(System.in);
-		int userOption = in.nextInt();
+		try {
+			Scanner in = new Scanner(System.in);
+			int userOption = in.nextInt();
+			return Ground.values()[userOption - 1];
+		} catch (ArrayIndexOutOfBoundsException aiobex) {
+			throw new InvalidUserInputException(ErrorMessages.MENU_OPTION_OUT_OF_BOUNDS);
+		} catch (InputMismatchException imex) {
+			throw new InvalidUserInputException(ErrorMessages.INVALID_MENU_OPTION);
+		}
 		
 		// in.close();
-		
-		return Ground.values()[userOption - 1];
 	}
 }
