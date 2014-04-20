@@ -24,18 +24,47 @@ public class TeamSelection {
 	
 	private static Map<Integer, String> optionMap = new HashMap<Integer, String>();
 	
+	
+	
+	
 	/**
 	 * Displays the available teams for the user to select from a specified league. It also initializes the mappings between user choice and team name selected.
+	 * 
+	 * This is the default overloading of the method (and the initial one), although it is unlikely to ever be called, because we need to take the opponent into account
+	 * anyway in different levels. 
 	 * 
 	 * @param leagueName the specified league
 	 */
 	public static void display(String leagueName) {
+		display(leagueName, null);
+	}
+	
+	public static void display(String leagueName, String opponent) {
 		
-		optionMap = new HashMap<Integer, String>(); // Clear previous values (for not leaving old values out of the current range)
+		List<Team> teams = Leagues.getTeams(leagueName);
+		
+		Team alreadySelectedTeam = null;
+		
+		if (opponent != null) {
+			for (Team team:teams) {
+				if (team.getName().equals(opponent)) {
+					alreadySelectedTeam = team;
+					break;
+				}
+			}
+			if (alreadySelectedTeam != null) {
+				teams.remove(alreadySelectedTeam);
+			}
+		}
+		
+		displayMenuOptionsFromTeams(teams);
+	}
+
+	private static void displayMenuOptionsFromTeams(List<Team> teams) {
 		
 		System.out.println();
 		
-		List<Team> teams = Leagues.getTeams(leagueName);
+		optionMap = new HashMap<Integer, String>(); // Clear previous values (for not leaving old values out of the current range)
 		
 		int count = 1;
 		for (Team team:teams) {

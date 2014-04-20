@@ -272,7 +272,7 @@ public class Gameflow {
 	private static String selectTeam(String opponent) {
 		
 		String league = selectTeamNation();
-		String teamName = selectTeamFromLeague(league);
+		String teamName = selectTeamFromLeague(league, opponent); // Building on previous work to make filtering teams easier
 		
 		while (opponent != null && opponent.equals(teamName)) {
 			System.out.println("A team cannot play against itself. Please select another team");
@@ -281,14 +281,14 @@ public class Gameflow {
 		return teamName;
 	}
 
-	private static String selectTeamFromLeague(String league) {
+	private static String selectTeamFromLeague(String league, String opponent) {
 		try {
-			TeamSelection.display(league);
+			TeamSelection.display(league, opponent);
 			String teamName = TeamSelection.getUserInput();
 			return teamName;
 		} catch (InvalidUserInputException iuiex) {
 			System.out.println(iuiex.getMessage());
-			return selectTeamFromLeague(league);
+			return selectTeamFromLeague(league, opponent);
 		}
 	}
 
