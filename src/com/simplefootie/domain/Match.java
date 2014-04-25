@@ -38,6 +38,8 @@ public class Match {
 	private boolean extraTimePlayed;
 	private boolean penaltyShootOutPlayed;
 	
+	private boolean matchPlayed;
+	
 	private Competition competition;
 	
 	private static Random rnd = new Random();
@@ -162,7 +164,33 @@ public class Match {
 	
 	@Override
 	public String toString() {
+		if (!this.matchPlayed) {
+			return this.getFixture();
+		} else {
+			return this.getResult();
+		}
+	}
+	
+	public String getFixture() {
 		return this.homeTeam.getName() + " - " + this.awayTeam.getName();
+	}
+	
+	public String getResult() {
+		
+		String opponents = this.homeTeam.getName() + " - " + this.awayTeam.getName();
+		String result =  homeTeamScore + "-" + awayTeamScore;
+		
+		if (this.extraTimePlayed) {
+			String normalTimeResult = result;
+			result = homeTeamScoreAET + " - " + awayTeamScoreAET + " (aet)" + ", Normal time: " + normalTimeResult;
+		}
+		
+		if (this.penaltyShootOutPlayed) {
+			String playingTimeResult = result;
+			result = homeTeamPenaltyShootOutScore + " - " + awayTeamPenaltyShootOutScore + " (pens)" + ", " + playingTimeResult; 
+		}
+		
+		return (opponents +  "   " + result);
 	}
 	
 	/**
@@ -352,5 +380,7 @@ public class Match {
 		
 		this.homeTeamScore *= homeGoalsAverageFactor;
 		this.awayTeamScore *= awayGoalsAverageFactor;
+		
+		this.matchPlayed = true;
 	}
 }

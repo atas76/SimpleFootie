@@ -37,6 +37,18 @@ public class Leagues {
 		return leagues;
 	}
 	
+	public static League getLeagueById(Integer leagueId) {
+		
+		List<League> leagues = getLeagues();
+		
+		for (League league: leagues) {
+			if (league.getLeagueId().equals(leagueId)) {
+				return league;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Getter of all teams' names irrespective of the league they belong to.
 	 * 

@@ -13,6 +13,7 @@ import com.simplefootie.domain.Ground;
 import com.simplefootie.domain.Match;
 import com.simplefootie.domain.exceptions.InvalidTeamRankingException;
 import com.simplefootie.domain.exceptions.TeamNotFoundException;
+import com.simplefootie.domain.tournament.Tournament;
 import com.simplefootie.gui.Screens;
 import com.simplefootie.screens.CompetitionSelection;
 import com.simplefootie.screens.InitMatchScreen;
@@ -203,16 +204,50 @@ public class Gameflow {
 			return;
 		}
 	}
+	
+	/**
+	 * I can't believe how I just shoved this in the Competition class initially.
+	 */
+	private static void promptNext() {
+		System.out.print("Press enter to continue");
+		Scanner in = new Scanner(System.in);
+		in.nextLine();
+	}
+	
+	/**
+	 * Hollywood principle.
+	 * 
+	 * Code based on the deprecated Competition.play() method
+	 * 
+	 * @param tournament The competition instance object ready to serve the controller.
+	 */
+	private static void play(Tournament tournament) throws InvalidTeamRankingException, DataException {
+		
+		System.out.println(tournament.getPreview());
+		promptNext();
+		
+		while (!tournament.isOver()) {
+			// System.out.println(tournament.getCurrentStageName());
+			System.out.println(tournament.proceed());
+			// System.out.println(tournament.getCurrentView());
+			promptNext();
+		}	
+	}
 
-	private static void startNextCompetition(Map<Integer, Competition> competitionSelection) throws InvalidTeamRankingException,DataException {
+	private static void startNextCompetition(Map<Integer, Competition> competitionSelection) throws InvalidTeamRankingException, DataException {
 		try {
 			int selectedCompetitionIndex = getUserInput("Select competition: ");
 			Competition selectedCompetition = competitionSelection.get(selectedCompetitionIndex);
-			selectedCompetition.play();
+			// Quite a logical leap here and this is where the problems start
+			// selectedCompetition.play();
+			Tournament tournament = new Tournament(selectedCompetition);
+			play(tournament);
+			
 		} catch (InvalidUserInputException iuiex) {
 			System.out.println(iuiex.getMessage());
 			startNextCompetition(competitionSelection);
 		} catch (NullPointerException npe) { // no competition was found (equivalent to array index out-of-bounds)
+			// npe.printStackTrace();
 			System.out.println(ErrorMessages.MENU_OPTION_OUT_OF_BOUNDS);
 			startNextCompetition(competitionSelection);
 		}

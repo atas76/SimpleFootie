@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.simplefootie.data.DataException;
 import com.simplefootie.domain.Competition;
-import com.simplefootie.domain.Ground;
 import com.simplefootie.domain.Match;
 import com.simplefootie.domain.Team;
 import com.simplefootie.domain.exceptions.InvalidTeamRankingException;
@@ -27,6 +26,18 @@ public class CompetitionStage {
 	
 	private int currentMatchDay = 0;
 	
+	public List<TieBreaker> getTieBreakers() {
+		return this.tieBreakers;
+	}
+	
+	public PairingType getPairingType() {
+		return this.pairingType;
+	}
+	
+	public StageType getStageType() {
+		return this.stageType;
+	}
+	
 	public void reset() {
 		this.qualifyingTeams = new ArrayList<Team>();
 		this.qualifiedTeams = new ArrayList<Team>();
@@ -42,6 +53,19 @@ public class CompetitionStage {
 		this.participantsNumber = participantsNumber;
 		this.name = name;
 	}
+	
+	public CompetitionStage(CompetitionStage competitionStage) {
+		// Immutable type metadata
+		this.stageType = competitionStage.stageType;
+		this.pairingType = competitionStage.pairingType;
+		this.tieBreakers = competitionStage.tieBreakers;
+		this.participantsNumber = competitionStage.participantsNumber;
+		this.name = competitionStage.name;
+		
+		// Instance data
+		this.reset(); // Handy method for initializing all mutable instance data
+	}
+	
 	
 	public void setQualifiedTeams(List<Team> teams) {
 		this.qualifiedTeams = teams;
@@ -71,8 +95,81 @@ public class CompetitionStage {
 		return this.currentMatchDay >= this.matchDays.size();
 	}
 	
+	public boolean isInitialized() {
+		return (this.draw != null);
+	}
+	
 	public void addQualifyingTeams(List<Team> teams) {
 		this.qualifyingTeams.addAll(teams);
+	}
+	
+	public int getCurrentMatchDayIndex() {
+		return this.currentMatchDay;
+	}
+	
+	public String proceed(Tournament tournament) throws InvalidTeamRankingException, DataException {
+		
+		if (!this.isInitialized()) {	
+			// Initialize stage with tournament details
+			setQualifiedTeams(tournament.getRemainingTeams().subList(tournament.getRemainingTeams().size() - getParticipantsNumber(), tournament.getRemainingTeams().size()));
+			addQualifyingTeams(tournament.getRemainingTeams().subList(0, tournament.getRemainingTeams().size() - getParticipantsNumber())); // Teams receiving bye
+		
+			draw();
+			createFixtures();
+		}
+		
+		FixtureGroup currentMatchDayFixtures = this.matchDays.get(this.currentMatchDay);
+		
+		String currentView = currentMatchDayFixtures.proceed(tournament.getMetadata(), this);
+		
+		String stageHeader = "";
+		
+		// First match day of the stage. Display stage title as well.
+		if (this.currentMatchDay == 0) {
+			stageHeader = "\n" + getName() + "\n";
+		} 
+		
+		currentView = stageHeader + currentView;
+		
+		if (currentMatchDayFixtures.isPlayed()) {
+			this.currentMatchDay++;
+		}
+		
+		if (this.isOver()) {
+			calculateQualifyingTeams();
+			tournament.resetRemainingTeams(this.getQualifyingTeams());
+		}
+		
+		return currentView;
+	}
+	
+	@Deprecated
+	public String getCurrentView() {
+		
+		if (this.isOver()) {
+			return getAggregateResults();
+		}
+		
+		String stageHeader = "";
+		
+		// First match day of the stage. Display stage title as well.
+		if (this.currentMatchDay == 0) {
+			stageHeader = "\n" + getName() + "\n";
+		}
+		
+		return stageHeader + getMatchDayView();
+		
+		/*
+		if (this.matchDays.get(this.currentMatchDay).isPlayed()) {
+			if (!this.matchDays.get(this.currentMatchDay).isDeterminant()) {
+				return getMatchDayView();
+			} else {
+				return getAggregateResults();
+			}
+		} else { // Fixtures display. Display conditionally the stage name as well.
+			return stageHeader + getMatchDayView();
+		}
+		*/
 	}
 	
 	/**
@@ -123,6 +220,7 @@ public class CompetitionStage {
 		}
 	}
 	
+	@Deprecated
 	public boolean showAggregateResults() {
 		// Display aggregate scores
 		
@@ -147,10 +245,41 @@ public class CompetitionStage {
 		return true;
 	}
 	
+	public String getAggregateResults() {
+		
+		StringBuilder aggregateResults = new StringBuilder();
+		
+		aggregateResults.append("\n");
+		aggregateResults.append("Aggregate scores for " + this.name);
+		aggregateResults.append("\n");
+		aggregateResults.append("\n");
+		
+		for (Grouping grouping:this.getGroupings()) {
+			aggregateResults.append(grouping.getAggregateScore());
+			aggregateResults.append("\n");
+			aggregateResults.append("Winners: " + grouping.getWinners().get(0).getName() + 
+					(grouping.getTieBreaker() != null?" on " + grouping.getTieBreaker().getDescription():""));
+			aggregateResults.append("\n");
+			aggregateResults.append("\n");
+		}
+		
+		return aggregateResults.toString();
+	}
+	
+	@Deprecated
 	public void showFixtures() {
 		this.matchDays.get(this.currentMatchDay).display();
 	}
 	
+	
+	public FixtureGroup getCurrentMatchDay() {
+		return this.matchDays.get(this.currentMatchDay);
+	}
+	
+	/**
+	 * Both updating of the view and the model with proceeding to the next stage. Awesome.
+	 */
+	@Deprecated
 	public void showResults() {
 		// Upon showing the results, match day is officially over.
 		for (Match match:this.matchDays.get(this.currentMatchDay++).getMatches()) {
@@ -159,6 +288,19 @@ public class CompetitionStage {
 		System.out.println();
 	}
 	
+	public String getMatchDayView() {
+		return this.matchDays.get(this.currentMatchDay).getView();
+	}
+	
+	/**
+	 * 
+	 * The stage should not dictate the match day phase
+	 * 
+	 * @param competition
+	 * @throws DataException
+	 * @throws InvalidTeamRankingException
+	 */
+	@Deprecated
 	public void playFixtures(Competition competition) throws DataException, InvalidTeamRankingException {
 		
 		FixtureGroup currentFixtures = this.matchDays.get(this.currentMatchDay);
@@ -171,5 +313,6 @@ public class CompetitionStage {
 				currentFixtures.calculateGroupingOutcome(match, this.tieBreakers, this.stageType, this.pairingType);
 			}
 		}
+		currentFixtures.setPlayed();
 	}
 }

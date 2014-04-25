@@ -64,6 +64,30 @@ public class Competition {
 		this.name = name;
 	}
 	
+	public String getPreview() {
+		
+		StringBuilder competitionPreview = new StringBuilder();
+		
+		competitionPreview.append("\n");
+		competitionPreview.append(this.name);
+		competitionPreview.append("\n");
+		competitionPreview.append("\n");
+		competitionPreview.append("Participating teams: (" + teams.size() + ")");
+		competitionPreview.append("\n");
+		for (Team team:teams) {
+			competitionPreview.append(team.getName());
+			competitionPreview.append("\n");
+		}
+		competitionPreview.append("\n");
+		
+		return competitionPreview.toString();
+	}
+	
+	/**
+	 * This method being private and void is a bad side-effect of everything being handled by the competition object internally.
+	 * But this must be changed and the competition object must be open to the world for reusing
+	 */
+	@Deprecated
 	private void showPreview() {
 		System.out.println();
 		System.out.println(this.name);
@@ -76,12 +100,20 @@ public class Competition {
 		System.out.println();
 	}
 	
+	/**
+	 * Controller functionality in a model class. Not a good idea.
+	 */
+	@Deprecated
 	private void promptNext() {
 		System.out.print("Press enter to continue");
 		Scanner in = new Scanner(System.in);
 		in.nextLine();
 	}
 	
+	/**
+	 * This affects instance data and thus not relevant anymore for this metadata type
+	 */
+	@Deprecated
 	private void initialize() {
 		this.remainingTeams = new ArrayList<Team>();
 		for (Team team:teams) {
@@ -95,6 +127,7 @@ public class Competition {
 	/**
 	 * Start the competition gameflow
 	 */
+	@Deprecated
 	public void play() throws InvalidTeamRankingException, DataException {
 		
 		initialize();
@@ -226,5 +259,9 @@ public class Competition {
 	
 	public void setStages(List<CompetitionStage> stages) {
 		this.stages = stages;
+	}
+	
+	public List<CompetitionStage> getStages() {
+		return this.stages;
 	}
 }
